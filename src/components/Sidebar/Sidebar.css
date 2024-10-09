@@ -1,0 +1,18 @@
+@keyframes heart-beat {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1); 
+    }
+  }
+  
+  .animate-heart {
+    animation: heart-beat 0.5s infinite; 
+  }
+  .logo-container {
+    border-width: 5px; 
+    border-style: solid; 
+    border-color: white; 
+  }
+  
