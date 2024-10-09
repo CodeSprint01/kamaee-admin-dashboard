@@ -1,12 +1,49 @@
-import Sidebar from "./components/Sidebar/sidebar"
-import './App.css'
-function App() {
+import React from "react"; 
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom"; 
+import SubCategory from "./components/SubCategory/SubCategory"; 
+import Dashboard from "./components/Dashboard/Dashboard"; 
+import Category from "./components/Category/Category"; 
+import Sidebar from "./components/Sidebar/sidebar"; 
+import Header from "./components/Header/Header"; 
+import Gigs from "./components/Gigs/Gigs"; 
+import User from "./components/User/User"; 
+import './App.css'; 
 
+function App() {
   return (
-   <div > 
-    <Sidebar />
-   </div>
-  )
+    <Router>
+      <Layout />
+    </Router>
+  );
 }
 
-export default App
+function Layout() {
+  const location = useLocation();
+  const headingMap = {
+    "/category": "Category",
+    "/subcategory": "SubCategory",
+    "/gigs": "Gigs",
+    "/user": "User",
+  };
+  
+  const heading = headingMap[location.pathname] || "Dashboard";
+  return (
+    <div className="flex">
+      <Sidebar />
+      <div className="flex-1">
+        <Header heading={heading} /> 
+        <div className="mt-14 ml-64 p-4"> 
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/category" element={<Category />} />
+            <Route path="/gigs" element={<Gigs />} />
+            <Route path="/subcategory" element={<SubCategory />} />
+            <Route path="/user" element={<User />} />
+          </Routes>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
