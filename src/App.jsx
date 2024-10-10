@@ -32,7 +32,7 @@ function Layout() {
       <Sidebar />
       <div className="flex-1">
         <Header heading={heading} /> 
-        <div className="mt-14 ml-64 p-4"> 
+        <div className="mt-14 ml-52 p-4"> 
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/category" element={<Category />} />
