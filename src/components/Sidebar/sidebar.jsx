@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/Logo.png";
-import { FaThList, FaListAlt, FaBriefcase, FaUserAlt, FaSignOutAlt } from "react-icons/fa"; 
+import { FaThList, FaListAlt, FaBriefcase, FaUserAlt } from "react-icons/fa"; 
 import { MdLogout } from "react-icons/md";
 import { LuLayoutDashboard } from "react-icons/lu"; 
+import CustomModal from "./CustomModal"; 
 import './Sidebar.css';
 
 const Sidebar = () => {
   const location = useLocation();
+  const [isModalOpen, setModalOpen] = useState(false); 
+
   const menuItems = [
     { name: "Dashboard", path: "/", icon: <LuLayoutDashboard /> },
     { name: "Category", path: "/category", icon: <FaThList /> },
@@ -17,9 +20,8 @@ const Sidebar = () => {
   ];
 
   const handleLogout = () => {
-    if (window.confirm("Are you sure you want to logout?")) {
-      console.log("User logged out");
-    }
+    setModalOpen(false);
+    console.log("User logged out");
   };
 
   return (
@@ -42,12 +44,17 @@ const Sidebar = () => {
 
       <div className="mt-10">
         <button 
-          onClick={handleLogout} 
+          onClick={() => setModalOpen(true)} 
           className="w-full bg-[#618abd] p-2 rounded flex items-center justify-center hover:bg-[#40556e]"
         >
           <MdLogout className="mr-2" /> Logout
         </button>
       </div>
+      <CustomModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onConfirm={handleLogout}
+      />
     </div>
   );
 };
