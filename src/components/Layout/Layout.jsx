@@ -8,6 +8,7 @@ import Sidebar from "../Sidebar/sidebar";
 import Header from "../Header/Header";
 import Gigs from "../Gigs/Gigs";
 import User from "../User/User";
+import NewSubCategory from "../NewSubCategory/NewSubCategory";
 
 function Layout({ onLogout }) {
   const location = useLocation(); 
@@ -15,6 +16,7 @@ function Layout({ onLogout }) {
     "/": "Dashboard",
     "/category": "Category",
     "/subcategory": "SubCategory",
+    "/new-SubCategory": "SubCategory",
     "/gigs": "Gigs",
     "/user": "User",
     "/new-category": "Category",
@@ -35,6 +37,7 @@ function Layout({ onLogout }) {
             <Route path="/subcategory" element={<SubCategory />} />
             <Route path="/user" element={<User />} />
             <Route path="/new-category" element={<NewCategory />} />
+            <Route path="/new-SubCategory" element={<NewSubCategory />} />
           </Routes>
         </div>
       </div>

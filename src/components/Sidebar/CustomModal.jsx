@@ -12,7 +12,7 @@ const CustomModal = ({ isOpen, onClose, onConfirm }) => {
         <div className="mt-4 flex justify-end">
           <button
             onClick={onClose}
-            className="mr-2 px-4 py-2 bg-[#0054ba] rounded hover:bg-white hover:text-[#0054ba]"
+            className="mr-2 px-4 py-2 text-white bg-[#0054ba] rounded hover:bg-white hover:text-[#0054ba]"
           >
             Cancel
           </button>

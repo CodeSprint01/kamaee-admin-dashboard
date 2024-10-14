@@ -1,7 +1,7 @@
 import React from "react";
 import { Typography } from "@material-tailwind/react";
 
-const DataTable = ({ rows, onDelete }) => {
+const DataTable = ({ rows }) => {
   const TABLE_HEAD = ["Name", "Job", "Employed", "Actions"];
 
   return (
