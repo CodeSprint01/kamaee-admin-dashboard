@@ -42,7 +42,7 @@ const Sidebar = ({ onLogout }) => {
         </div>
       ))}
 
-      <div className="mt-20">
+      <div className="mt-2">
         <button 
           onClick={() => setModalOpen(true)} 
           className="w-full bg-[#618abd] p-2 rounded flex items-center justify-center hover:bg-[#40556e]"
