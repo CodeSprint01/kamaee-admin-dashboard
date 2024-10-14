@@ -13,7 +13,7 @@ const SubCategory = () => {
   ];
 
   return (
-    <div className="relative"> 
+    <div className="relative ml-3"> 
     <Card className="h-full w-full mt-10 overflow-scroll">
       <DataTable rows={TABLE_ROWS} />
     </Card>
