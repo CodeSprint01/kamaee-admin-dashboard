@@ -4,12 +4,12 @@ import Logo from "../../assets/Logo.png";
 import { FaThList, FaListAlt, FaBriefcase, FaUserAlt } from "react-icons/fa"; 
 import { MdLogout } from "react-icons/md";
 import { LuLayoutDashboard } from "react-icons/lu"; 
-import CustomModal from "./CustomModal"; 
+import CustomModal from "./CustomModal";
 import './Sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ onLogout }) => {  
   const location = useLocation();
-  const [isModalOpen, setModalOpen] = useState(false); 
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const menuItems = [
     { name: "Dashboard", path: "/", icon: <LuLayoutDashboard /> },
@@ -21,7 +21,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     setModalOpen(false);
-    console.log("User logged out");
+    onLogout();  
   };
 
   return (
@@ -42,7 +42,7 @@ const Sidebar = () => {
         </div>
       ))}
 
-      <div className="mt-10">
+      <div className="mt-20">
         <button 
           onClick={() => setModalOpen(true)} 
           className="w-full bg-[#618abd] p-2 rounded flex items-center justify-center hover:bg-[#40556e]"
@@ -53,7 +53,7 @@ const Sidebar = () => {
       <CustomModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
-        onConfirm={handleLogout}
+        onConfirm={handleLogout} 
       />
     </div>
   );

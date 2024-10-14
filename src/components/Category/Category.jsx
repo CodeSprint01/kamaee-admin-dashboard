@@ -32,7 +32,7 @@ const Category = () => {
         >
           <AiOutlinePlus size={30} />
           <span className="absolute bottom-full mb-2 w-max p-2 text-xs text-white bg-[#0054ba] rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Add more data
+          Add New Category
           </span>
         </button>
       </div>
