@@ -2,7 +2,7 @@ import formLogo from "../../assets/form-logo.png";
 import { FaUser, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import bgimg from "../../assets/bgimg.jpg";
-// import logo from "../../assets/logo.png";
+import logo from "../../assets/logo.png";
 import React, { useState } from "react";
 
 const LoginForm = ({ onLogin }) => {
@@ -72,7 +72,7 @@ const LoginForm = ({ onLogin }) => {
       style={{ backgroundImage: `url(${bgimg})` }}
     >
       <div className="absolute top-5 left-5">
-        {/* <img src={logo} alt="Logo" className="w-12 h-auto" /> */}
+        <img src={logo} alt="Logo" className="w-12 h-auto" />
       </div>
       <form onSubmit={handleSubmit} className="relative ">
         <div className="flex justify-center mb-6">
