@@ -5,9 +5,9 @@ const CustomModal = ({ isOpen, onClose, onConfirm }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
-      <div className="bg-gray-700 rounded-lg shadow-lg p-6 z-10 max-w-md w-full mx-4 sm:mx-0">
-        <h2 className="text-lg font-semibold mb-4">Logout Confirmation</h2>
+      <div className="absolute inset-0 bg-gray-700 opacity-50"></div>
+      <div className="bg-gray-700 text-white rounded-lg shadow-lg p-6 z-10 max-w-md w-full mx-4 sm:mx-0">
+        <h2 className="text-lg  font-semibold mb-4">Logout Confirmation</h2>
         <p>Are you sure you want to logout?</p>
         <div className="mt-4 flex justify-end">
           <button
