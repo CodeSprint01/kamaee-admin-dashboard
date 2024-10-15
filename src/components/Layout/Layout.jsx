@@ -20,6 +20,7 @@ function Layout({ onLogout }) {
     "/gigs": "Gigs",
     "/user": "User",
     "/new-category": "Category",
+    "/new-Subcategory": "Subcategory",
   };
 
   const getHeading = () => headings[location.pathname] || ""; 

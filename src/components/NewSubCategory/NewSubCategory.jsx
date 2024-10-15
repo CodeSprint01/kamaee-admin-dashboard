@@ -30,7 +30,7 @@ const NewSubCategory = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-20 p-8 bg-gray-100 shadow-lg rounded">
-      <h2 className="text-2xl font-bold mb-6">Add New Category</h2>
+      <h2 className="text-2xl font-bold mb-6">Add New SubCategory</h2>
       <form onSubmit={handleSubmit}>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <div className="mb-4">

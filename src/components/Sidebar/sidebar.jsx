@@ -23,8 +23,14 @@ const Sidebar = ({ onLogout }) => {
   const getHeading = () => headings[location.pathname] || "";
 
   const headings = {
+    "/": "Dashboard",
     "/category": "Category",
     "/subcategory": "SubCategory",
+    "/new-SubCategory": "SubCategory",
+    "/gigs": "Gigs",
+    "/user": "User",
+    "/new-category": "Category",
+    "/new-Subcategory": "Subcategory",
     
   };
 
@@ -76,7 +82,7 @@ const Sidebar = ({ onLogout }) => {
         </div>
 
         {menuItems.map((item) => (
-          <div className="mt-5" key={item.name}>
+          <div className="mt-5 " key={item.name}>
             <Link to={item.path} onClick={handleMenuItemClick}>
               <h2
                 className={`flex items-center text-xl font-medium mb-2 cursor-pointer rounded p-3 transition duration-300 
