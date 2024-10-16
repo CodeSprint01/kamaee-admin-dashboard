@@ -20,19 +20,18 @@ const Sidebar = ({ onLogout }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   // Dynamic heading based on route path
-  const getHeading = () => headings[location.pathname] || "";
-
   const headings = {
     "/": "Dashboard",
     "/category": "Category",
     "/subcategory": "SubCategory",
-    "/new-SubCategory": "SubCategory",
+    "/new-subcategory": "SubCategory", // Updated here
     "/gigs": "Gigs",
     "/user": "User",
     "/new-category": "Category",
-    "/new-Subcategory": "Subcategory",
-    
+    "/new-subcategory": "Subcategory", // Updated here
   };
+
+  const getHeading = () => headings[location.pathname] || "";
 
   const menuItems = [
     { name: "Dashboard", path: "/", icon: <LuLayoutDashboard /> },
@@ -74,11 +73,7 @@ const Sidebar = ({ onLogout }) => {
         } md:translate-x-0 w-52`}
       >
         <div className="logo-container w-32 h-32 flex justify-center items-center rounded-full mt-5 ml-5">
-          <img
-            src={Logo}
-            alt="Logo"
-            className="w-28 rounded-full animate-heart"
-          />
+          <img src={Logo} alt="Logo" className="w-28 rounded-full animate-heart" />
         </div>
 
         {menuItems.map((item) => (

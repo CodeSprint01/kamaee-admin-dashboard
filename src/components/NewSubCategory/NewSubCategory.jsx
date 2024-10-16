@@ -26,6 +26,7 @@ const NewSubCategory = () => {
       return;
     }
     setError("");
+    // Handle form submission logic here
   };
 
   return (
