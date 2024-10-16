@@ -2,7 +2,7 @@ import React from "react";
 import { Typography } from "@material-tailwind/react";
 
 const DataTable = ({ rows }) => {
-  const TABLE_HEAD = ["Name", "Job", "Employed", "Actions"];
+  const TABLE_HEAD = ["subcategory_title", "category_id", "created_at", "updated_at"];
 
   return (
     <table className="w-full min-w-max table-auto text-left">
@@ -49,7 +49,7 @@ const DataTable = ({ rows }) => {
               <td className={classes}>
                 <div className="flex space-x-10">
                   <Typography as="a" href="#" variant="small" color="blue-gray" className="font-normal">
-                    Edit
+                    
                   </Typography>
                   <Typography
                     as="button"
@@ -57,7 +57,7 @@ const DataTable = ({ rows }) => {
                     color="red"
                     className="font-normal"
                   >
-                    Delete
+                    
                   </Typography>
                 </div>
               </td>
