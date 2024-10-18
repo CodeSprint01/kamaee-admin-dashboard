@@ -2,7 +2,6 @@ import formLogo from "../../assets/form-logo.png";
 import { FaUser, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import bgimg from "../../assets/bgimg.jpg";
-// import logo from "../../assets/logo.png";
 import React, { useState } from "react";
 
 const LoginForm = ({ onLogin }) => {
@@ -74,7 +73,7 @@ const LoginForm = ({ onLogin }) => {
       <div className="absolute top-5 left-5">
         {/* <img src={logo} alt="Logo" className="w-12 h-auto" /> */}
       </div>
-      <form onSubmit={handleSubmit} className="relative ">
+      <form onSubmit={handleSubmit} className="relative">
         <div className="flex justify-center mb-6">
           <img src={formLogo} alt="Form Logo" className="w-16" />
         </div>
@@ -110,12 +109,14 @@ const LoginForm = ({ onLogin }) => {
         {passwordError && (
           <p className="text-red-500 text-xs mt-2 ml-2">{passwordError}</p>
         )}
-
+<div className="flex justify-center">
         <button
           type="submit"
-          className={`w-full h-12 bg-[#2154c0] rounded-full text-white font-bold text-lg transition duration-500 ease-in-out transform hover:bg-[#203aa1] ${
-            isLoading ? "flex justify-center items-center" : ""
-          }`}
+          className={`${
+            isLoading
+              ? "w-12 h-12"
+              : "w-full h-12"
+          } bg-[#2154c0] rounded-full text-white font-bold text-lg transition-all duration-300 ease-in-out transform hover:bg-[#203aa1] flex justify-center items-center`}
           disabled={isLoading}
         >
           {isLoading ? (
@@ -124,6 +125,7 @@ const LoginForm = ({ onLogin }) => {
             "Login"
           )}
         </button>
+        </div>
       </form>
     </div>
   );

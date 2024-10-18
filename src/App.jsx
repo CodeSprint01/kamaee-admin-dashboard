@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-import LoginForm from "./components/LoginForm/LoginForm";
 import React, { useState, useEffect } from "react";
-import Layout from "./components/Layout/Layout"; 
+import LoginForm from "./components/LoginForm/LoginForm";
+import Layout from "./components/Layout/Layout";
+import CategoryTable from "./components/Category/DataTable"; 
+import NewCategory from "./components/New-Category/NewCategory"; 
 import './App.css';
 
 function App() {
@@ -31,10 +33,30 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Login Route */}
         <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+
+        {/* Protected Routes */}
         <Route
           path="/*"
-          element={isLoggedIn ? <Layout onLogout={handleLogout} /> : <Navigate to="/login" />}
+          element={
+            isLoggedIn ? (
+              <Layout onLogout={handleLogout}>
+                <Routes>
+                  {/* Category Table Route */}
+                  <Route path="/category" element={<CategoryTable />} />
+
+                  {/* Add New Category Route */}
+                  <Route path="/new-category" element={<NewCategory />} />
+
+                  {/* Default Route */}
+                  <Route path="*" element={<Navigate to="/category" />} />
+                </Routes>
+              </Layout>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
         />
       </Routes>
     </Router>

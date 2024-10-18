@@ -2,7 +2,16 @@ import React from "react";
 import { Typography } from "@material-tailwind/react";
 
 const DataTable = ({ rows }) => {
-  const TABLE_HEAD = ["category_name", "imges", "created_at", "updated_at"];
+  console.log(rows, "DataTable Rows");
+
+  const TABLE_HEAD = ["Category Name", "Image", "Created At", "Updated At" ];
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
 
   return (
     <table className="w-full min-w-max table-auto text-left">
@@ -25,45 +34,49 @@ const DataTable = ({ rows }) => {
         </tr>
       </thead>
       <tbody>
-        {rows.map(({ name, job, date }, index) => {
-          const isLast = index === rows.length - 1;
-          const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
+        {rows.length === 0 ? (
+          <tr>
+            <td colSpan={TABLE_HEAD.length} className="p-4 text-center">
+              <Typography variant="small" color="blue-gray" className="font-normal">
+                No categories available
+              </Typography>
+            </td>
+          </tr>
+        ) : (
+          rows.map(({ id, category_name, image, updated_at, created_at }, index) => {
+            const isLast = index === rows.length - 1;
+            const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
 
-          return (
-            <tr key={name} className={index % 2 !== 0 ? "bg-gray-100" : ""}>
-              <td className={classes}>
-                <Typography variant="small" color="blue-gray" className="font-normal">
-                  {name}
-                </Typography>
-              </td>
-              <td className={classes}>
-                <Typography variant="small" color="blue-gray" className="font-normal">
-                  {job}
-                </Typography>
-              </td>
-              <td className={classes}>
-                <Typography variant="small" color="blue-gray" className="font-normal">
-                  {date}
-                </Typography>
-              </td>
-              <td className={classes}>
-                <div className="flex space-x-10">
-                  <Typography as="a" href="#" variant="small" color="blue-gray" className="font-normal">
-              
+            return (
+              <tr key={id} className={index % 2 !== 0 ? "bg-gray-100" : ""}>
+                <td className={classes}>
+                  <Typography variant="small" color="blue-gray" className="font-normal">
+                    {category_name}
                   </Typography>
-                  <Typography
-                    as="button"
-                    variant="small"
-                    color="red"
-                    className="font-normal"
-                  >
-                    
+                </td>
+                <td className={classes}>
+                  <Typography variant="small" color="blue-gray" className="font-normal">
+                    {image ? (
+                      <img src={`https://api.kamaee.pk${image}`} alt={category_name} height={50} width={50} />
+                    ) : (
+                      <span>No Image</span>
+                    )}
                   </Typography>
-                </div>
-              </td>
-            </tr>
-          );
-        })}
+                </td>
+                <td className={classes}>
+                  <Typography variant="small" color="blue-gray" className="font-normal">
+                    {formatDate(created_at)}
+                  </Typography>
+                </td>
+                <td className={classes}>
+                  <Typography variant="small" color="blue-gray" className="font-normal">
+                    {formatDate(updated_at)}
+                  </Typography>
+                </td>
+              </tr>
+            );
+          })
+        )}
       </tbody>
     </table>
   );
