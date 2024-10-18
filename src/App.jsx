@@ -41,7 +41,7 @@ function App() {
           path="/*"
           element={
             isLoggedIn ? (
-              <Layout onLogout={handleLogout}>
+              <Layout onLogout={handleLogout} className="">
                 <Routes>
                   {/* Category Table Route */}
                   <Route path="/category" element={<CategoryTable />} />

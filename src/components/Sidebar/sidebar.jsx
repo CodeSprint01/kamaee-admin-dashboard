@@ -53,7 +53,7 @@ const Sidebar = ({ onLogout }) => {
   return (
     <div>
       {/* Header for smaller screens */}
-      <div className="bg-[#0054ba] md:hidden text-white fixed top-0 left-0 w-full flex items-center justify-between p-3 z-50">
+      <div className="bg-[#0054ba] md:hidden text-white fixed top-0 overflow-x-hidden left-0 w-full flex items-center justify-between p-3 z-50">
         <img src={Logo} alt="Logo" className="w-12 rounded-full" />
         <div className="text-center flex-1">
           <h1 className="text-lg font-bold">{getHeading()}</h1> {/* Centered heading */}

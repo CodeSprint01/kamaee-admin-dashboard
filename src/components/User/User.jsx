@@ -50,13 +50,13 @@ const User = () => {
   };
 
   const handleEditUser = (user) => {
-    setCurrentUser(user); // Set the current user for editing
-    setIsEditDialogOpen(true); // Open the edit dialog
+    setCurrentUser(user); 
+    setIsEditDialogOpen(true); 
   };
 
   const handleDeleteUser = (userId) => {
-    setUserToDelete(userId); // Set the user to delete
-    setIsDeleteConfirmationOpen(true); // Open the confirmation dialog
+    setUserToDelete(userId); 
+    setIsDeleteConfirmationOpen(true); 
   };
 
   const confirmDelete = async () => {
@@ -67,13 +67,13 @@ const User = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        // Refresh the user list after deletion
+       
         setUsers(users.filter(user => user.id !== userToDelete));
       } catch (error) {
         setError("Error deleting user");
       }
-      setIsDeleteConfirmationOpen(false); // Close the confirmation dialog
-      setUserToDelete(null); // Reset the user to delete
+      setIsDeleteConfirmationOpen(false); 
+      setUserToDelete(null); 
     }
   };
 
@@ -95,8 +95,8 @@ const User = () => {
     } catch (error) {
       setError("Error updating user");
     }
-    setIsEditDialogOpen(false); // Close the edit dialog
-    setCurrentUser(null); // Reset the current user
+    setIsEditDialogOpen(false); 
+    setCurrentUser(null); 
   };
 
   if (loading) {
@@ -111,9 +111,9 @@ const User = () => {
 
   return (
     <div className="mt-15 mx-7">
-      <div className="overflow-hidden">
+      <div className="">
         {/* Scrollable container for the table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-scroll">
           <table className="min-w-full bg-white border border-gray-300">
             <thead>
               <tr>
@@ -266,7 +266,7 @@ const User = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <form
             onSubmit={handleEditSubmit}
-            className="bg-white p-4 rounded shadow-lg w-80 max-h-[80vh] overflow-y-auto"
+            className="bg-white p-4 rounded shadow-lg w-80 max-h-[60vh] overflow-y-auto"
           >
             <Typography variant="h6" color="blue-gray" className="mb-4">
               Edit User
