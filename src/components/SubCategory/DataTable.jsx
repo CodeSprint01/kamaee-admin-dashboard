@@ -11,7 +11,7 @@ const DataTable = ({ rows, onEdit, onDelete }) => {
           {TABLE_HEAD.map((head) => (
             <th key={head} className="border-b border-gray-300 bg-gray-200 p-4">
               <Typography variant="small" color="blue-gray" className="font-bold leading-none opacity-70">
-                {head}
+                {head || "N/A"}
               </Typography>
             </th>
           ))}
@@ -27,21 +27,21 @@ const DataTable = ({ rows, onEdit, onDelete }) => {
               <tr key={row.id} className={index % 2 !== 0 ? "bg-gray-100" : ""}>
                 <td className={classes}>
                   <Typography variant="small" color="blue-gray" className="font-normal">
-                    {row.subcategory_title}
+                    {row.subcategory_title || "N/A"}
                   </Typography>
                 </td>
                 <td className={classes}>
                   <Typography variant="small" color="blue-gray" className="font-normal">
-                    {row.category}
+                    {row.category || "N/A"}
                   </Typography>
                 </td>
                 <td className={classes}>
                   <Typography variant="small" color="blue-gray" className="font-normal">
-                    {row.created_at}
+                    {row.created_at || "N/A"}
                   </Typography>
                 </td>
                 <td className={classes}>
-                  <button onClick={() => onEdit(row.id)} className="text-blue-600 hover:underline">
+                  <button onClick={() => onEdit(row)} className="text-blue-600 hover:underline">
                     Edit
                   </button>
                   <button onClick={() => onDelete(row.id)} className="text-red-600 hover:underline ml-4">

@@ -22,9 +22,12 @@ const SubCategory = () => {
   useEffect(() => {
     const fetchSubCategories = async () => {
       try {
-        const response = await axios.get("https://api.kamaee.pk/api/subcategories", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          "https://api.kamaee.pk/api/subcategories",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         const subcategories = response.data.subcategory.map((item) => ({
           id: item.id,
@@ -36,7 +39,10 @@ const SubCategory = () => {
         setTableRows(subcategories);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching subcategories:", error.response ? error.response.data : error.message);
+        console.error(
+          "Error fetching subcategories:",
+          error.response ? error.response.data : error.message
+        );
         setError("Error fetching subcategories");
         setLoading(false);
       }
@@ -51,7 +57,10 @@ const SubCategory = () => {
         if (Array.isArray(response.data.category)) {
           setCategories(response.data.category);
         } else {
-          console.error("Unexpected categories format:", response.data.category);
+          console.error(
+            "Unexpected categories format:",
+            response.data.category
+          );
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -67,8 +76,12 @@ const SubCategory = () => {
   };
 
   const handleEdit = (row) => {
-    setEditData(row);
-    setIsModalOpen(true);
+    if (row && row.id && row.subcategory_title) {
+      setEditData(row);
+      setIsModalOpen(true);
+    } else {
+      console.error("Invalid subcategory data:", row);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -79,32 +92,28 @@ const SubCategory = () => {
         });
         setTableRows((prevRows) => prevRows.filter((row) => row.id !== id));
       } catch (error) {
-        console.error("Error deleting subcategory:", error.response ? error.response.data : error.message);
+        console.error(
+          "Error deleting subcategory:",
+          error.response ? error.response.data : error.message
+        );
         setError("Error deleting subcategory");
       }
     }
   };
 
-  const handleModalSubmit = async (updatedData) => {
-    try {
-      await axios.post(
-        `https://api.kamaee.pk/api/update/subcategory/${updatedData.id}`,
-        {
-          subcategory_title: updatedData.subcategory_title,
-          category: updatedData.category,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setTableRows((prevRows) =>
-        prevRows.map((row) => (row.id === updatedData.id ? updatedData : row))
-      );
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error("Error updating subcategory:", error.response ? error.response.data : error.message);
-      setError("Error updating subcategory");
-    }
+  const handleModalSubmit = (updatedData) => {
+    setTableRows((prevRows) =>
+      prevRows.map((row) =>
+        row.id === updatedData.id
+          ? {
+              ...row,
+              subcategory_title: updatedData.subcategory_title,
+              category: updatedData.category_name, // Updated to display category name correctly
+            }
+          : row
+      )
+    );
+    setIsModalOpen(false);
   };
 
   const handleAddSubCategory = async () => {
@@ -112,9 +121,6 @@ const SubCategory = () => {
       alert("Please fill in all fields.");
       return;
     }
-
-    console.log("Selected Category ID:", selectedCategory);
-    console.log("Subcategory Title:", subCategoryTitle);
 
     try {
       const response = await axios.post(
@@ -141,8 +147,14 @@ const SubCategory = () => {
       setSelectedCategory("");
       setSubCategoryTitle("");
     } catch (error) {
-      console.error("Error adding subcategory:", error.response ? error.response.data : error.message);
-      setError("Error adding subcategory: " + (error.response ? error.response.data.message : error.message));
+      console.error(
+        "Error adding subcategory:",
+        error.response ? error.response.data : error.message
+      );
+      setError(
+        "Error adding subcategory: " +
+          (error.response ? error.response.data.message : error.message)
+      );
     }
   };
 
