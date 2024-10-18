@@ -8,28 +8,28 @@ import Sidebar from "../Sidebar/sidebar";
 import Header from "../Header/Header";
 import Gigs from "../Gigs/Gigs";
 import User from "../User/User";
-import NewSubCategory from "../NewSubCategory/NewSubCategory";
+// import NewSubCategory from "../NewSubCategory/NewSubCategory";
+
 
 function Layout({ onLogout }) {
-  const location = useLocation(); 
+  const location = useLocation();
   const headings = {
     "/": "Dashboard",
     "/category": "Category",
     "/subcategory": "SubCategory",
-    "/new-SubCategory": "SubCategory",
+    "/new-subcategory": "SubCategory",
     "/gigs": "Gigs",
     "/user": "User",
     "/new-category": "Category",
-    "/new-Subcategory": "Subcategory",
   };
 
-  const getHeading = () => headings[location.pathname] || ""; 
+  const getHeading = () => headings[location.pathname] || "";
 
   return (
     <div className="flex">
       <Sidebar onLogout={onLogout} />
-      <div className="flex-1 transition-all mt-9 md:mt-3 xl:mt-3 lg:mt-3 duration-300  sm:ml-0 md:ml-52  lg:ml-48 xl:ml-48 lg:p-4  "> 
-        <Header heading={getHeading()} /> 
+      <div className="flex-1 transition-all mt-9 md:mt-3 xl:mt-3 lg:mt-3 duration-300 sm:ml-0 md:ml-52 lg:ml-48 xl:ml-48 lg:p-4">
+        <Header heading={getHeading()} />
         <div className="mt-14 md:p-4">
           <Routes>
             <Route path="/" element={<Dashboard />} />
@@ -38,7 +38,7 @@ function Layout({ onLogout }) {
             <Route path="/subcategory" element={<SubCategory />} />
             <Route path="/user" element={<User />} />
             <Route path="/new-category" element={<NewCategory />} />
-            <Route path="/new-SubCategory" element={<NewSubCategory />} />
+            {/* <Route path="/new-subcategory" element={<NewSubCategory />} /> */}
           </Routes>
         </div>
       </div>
