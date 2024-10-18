@@ -78,6 +78,7 @@ const SubCategory = () => {
   const handleEdit = (row) => {
     if (row && row.id && row.subcategory_title) {
       setEditData(row);
+      setSelectedCategory(row.category_id); // Assuming category_id is returned in the response
       setIsModalOpen(true);
     } else {
       console.error("Invalid subcategory data:", row);
@@ -186,6 +187,7 @@ const SubCategory = () => {
       {isModalOpen && (
         <EditModal
           subcategory={editData}
+          categories={categories} // Pass categories to EditModal
           onSubmit={handleModalSubmit}
           onClose={() => setIsModalOpen(false)}
         />

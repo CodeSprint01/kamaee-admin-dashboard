@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@material-tailwind/react";
 
-const EditModal = ({ subcategory, onSubmit, onClose }) => {
+const EditModal = ({ subcategory, categories, onSubmit, onClose }) => {
   const [subcategoryTitle, setSubcategoryTitle] = useState("");
-  const [categoryName, setCategoryName] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     if (subcategory) {
       setSubcategoryTitle(subcategory.subcategory_title);
-      setCategoryName(subcategory.category);
+      setSelectedCategory(subcategory.category_id); // Assuming category_id is returned in the response
     }
   }, [subcategory]);
 
@@ -19,7 +19,15 @@ const EditModal = ({ subcategory, onSubmit, onClose }) => {
       return;
     }
 
-    onSubmit({ id: subcategory.id, subcategory_title: subcategoryTitle, category_name: categoryName });
+    // Find the selected category name based on selectedCategory ID
+    const category = categories.find(cat => cat.id === parseInt(selectedCategory));
+    const categoryName = category ? category.category_name : "";
+
+    onSubmit({
+      id: subcategory.id,
+      subcategory_title: subcategoryTitle,
+      category_name: categoryName, // Send the category name instead of ID
+    });
   };
 
   return (
@@ -38,13 +46,20 @@ const EditModal = ({ subcategory, onSubmit, onClose }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Category Name</label>
-            <input
-              type="text"
-              value={categoryName}
-              readOnly
-              className="border border-gray-300 rounded-md p-2 w-full bg-gray-200"
-            />
+            <label className="block text-sm font-medium mb-2">Category</label>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="border border-gray-300 rounded-md p-2 w-full"
+              required
+            >
+              <option value="" disabled>Select a category</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.category_name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex justify-between">
             <Button type="button" color="red" onClick={onClose} className="p-2 bg-slate-800">
