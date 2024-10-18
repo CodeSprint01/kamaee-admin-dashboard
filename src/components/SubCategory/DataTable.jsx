@@ -1,23 +1,16 @@
 import React from "react";
 import { Typography } from "@material-tailwind/react";
 
-const DataTable = ({ rows }) => {
-  const TABLE_HEAD = ["Subcategory Title", "Category", "Created At", "Updated At"]; 
+const DataTable = ({ rows, onEdit, onDelete }) => {
+  const TABLE_HEAD = ["Subcategory Title", "Category Title", "Added", "Action"];
 
   return (
-    <table className="w-full min-w-max table-auto text-left">
+    <table className="w-full min-w-max table-auto text-left ">
       <thead>
         <tr>
           {TABLE_HEAD.map((head) => (
-            <th
-              key={head}
-              className="border-b border-gray-300 bg-gray-200 p-4"
-            >
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-bold leading-none opacity-70"
-              >
+            <th key={head} className="border-b border-gray-300 bg-gray-200 p-4">
+              <Typography variant="small" color="blue-gray" className="font-bold leading-none opacity-70">
                 {head}
               </Typography>
             </th>
@@ -31,7 +24,7 @@ const DataTable = ({ rows }) => {
             const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
 
             return (
-              <tr key={row.subcategory_title} className={index % 2 !== 0 ? "bg-gray-100" : ""}>
+              <tr key={row.id} className={index % 2 !== 0 ? "bg-gray-100" : ""}>
                 <td className={classes}>
                   <Typography variant="small" color="blue-gray" className="font-normal">
                     {row.subcategory_title}
@@ -48,9 +41,12 @@ const DataTable = ({ rows }) => {
                   </Typography>
                 </td>
                 <td className={classes}>
-                  <Typography variant="small" color="blue-gray" className="font-normal">
-                    {row.updated_at}
-                  </Typography>
+                  <button onClick={() => onEdit(row.id)} className="text-blue-600 hover:underline">
+                    Edit
+                  </button>
+                  <button onClick={() => onDelete(row.id)} className="text-red-600 hover:underline ml-4">
+                    Delete
+                  </button>
                 </td>
               </tr>
             );

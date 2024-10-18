@@ -8,22 +8,22 @@ import Sidebar from "../Sidebar/sidebar";
 import Header from "../Header/Header";
 import Gigs from "../Gigs/Gigs";
 import User from "../User/User";
-import NewSubCategory from "../NewSubCategory/NewSubCategory";
+// import NewSubCategory from "../NewSubCategory/NewSubCategory";
+
 
 function Layout({ onLogout }) {
-  const location = useLocation(); 
+  const location = useLocation();
   const headings = {
     "/": "Dashboard",
     "/category": "Category",
     "/subcategory": "SubCategory",
-    "/new-subcategory": "SubCategory", // Updated here
+    "/new-subcategory": "SubCategory",
     "/gigs": "Gigs",
     "/user": "User",
     "/new-category": "Category",
-    "/new-subcategory": "Subcategory", // Updated here
   };
 
-  const getHeading = () => headings[location.pathname] || ""; 
+  const getHeading = () => headings[location.pathname] || "";
 
   return (
     <div className="flex">
@@ -38,7 +38,7 @@ function Layout({ onLogout }) {
             <Route path="/subcategory" element={<SubCategory />} />
             <Route path="/user" element={<User />} />
             <Route path="/new-category" element={<NewCategory />} />
-            <Route path="/new-subcategory" element={<NewSubCategory />} /> {/* Ensure this matches */}
+            {/* <Route path="/new-subcategory" element={<NewSubCategory />} /> */}
           </Routes>
         </div>
       </div>
