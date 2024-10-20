@@ -54,20 +54,16 @@ const EditModal = ({ subcategory, categories, onSubmit, onClose }) => {
               required
             >
               <option value="" disabled>Select a category</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.category_name}
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.category_name}
                 </option>
               ))}
             </select>
           </div>
           <div className="flex justify-between">
-            <Button type="button" color="red" onClick={onClose} className="p-2 bg-slate-800">
-              Cancel
-            </Button>
-            <Button type="submit" color="green" className="p-2 bg-slate-800">
-              Save Changes
-            </Button>
+            <Button type="submit" className="bg-[#0054ba] text-white">Update</Button>
+            <Button type="button" onClick={onClose} className="text-gray-500">Cancel</Button>
           </div>
         </form>
       </div>

@@ -1,63 +1,32 @@
 import React from "react";
-import { Typography } from "@material-tailwind/react";
 
 const DataTable = ({ rows, onEdit, onDelete }) => {
-  const TABLE_HEAD = ["Subcategory Title", "Category Title", "Added", "Action"];
-
   return (
-    <table className="w-full min-w-max table-auto text-left ">
+    <table className="min-w-full border border-gray-300">
       <thead>
-        <tr>
-          {TABLE_HEAD.map((head) => (
-            <th key={head} className="border-b border-gray-300 bg-gray-200 p-4">
-              <Typography variant="small" color="blue-gray" className="font-bold leading-none opacity-70">
-                {head || "N/A"}
-              </Typography>
-            </th>
-          ))}
+        <tr className="bg-gray-200">
+          <th className="border border-gray-300 p-2">Subcategory Title</th>
+          <th className="border border-gray-300 p-2">Category</th>
+          <th className="border border-gray-300 p-2">Created At</th>
+          <th className="border border-gray-300 p-2">Actions</th>
         </tr>
       </thead>
       <tbody>
-        {rows.length > 0 ? (
-          rows.map((row, index) => {
-            const isLast = index === rows.length - 1;
-            const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
-
-            return (
-              <tr key={row.id} className={index % 2 !== 0 ? "bg-gray-100" : ""}>
-                <td className={classes}>
-                  <Typography variant="small" color="blue-gray" className="font-normal">
-                    {row.subcategory_title || "N/A"}
-                  </Typography>
-                </td>
-                <td className={classes}>
-                  <Typography variant="small" color="blue-gray" className="font-normal">
-                    {row.category || "N/A"}
-                  </Typography>
-                </td>
-                <td className={classes}>
-                  <Typography variant="small" color="blue-gray" className="font-normal">
-                    {row.created_at || "N/A"}
-                  </Typography>
-                </td>
-                <td className={classes}>
-                  <button onClick={() => onEdit(row)} className="text-blue-600 hover:underline">
-                    Edit
-                  </button>
-                  <button onClick={() => onDelete(row.id)} className="text-red-600 hover:underline ml-4">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            );
-          })
-        ) : (
-          <tr>
-            <td colSpan={4} className="p-4 text-center">
-              No data available
+        {rows.map((row) => (
+          <tr key={row.id} className="bg-white even:bg-gray-100">
+            <td className="border border-gray-300 p-2">{row.subcategory_title}</td>
+            <td className="border border-gray-300 p-2">{row.category}</td>
+            <td className="border border-gray-300 p-2">{row.created_at}</td>
+            <td className="border border-gray-300 p-2">
+              <button onClick={() => onEdit(row)} className="text-blue-600 hover:underline">
+                Edit
+              </button>
+              <button onClick={() => onDelete(row.id, row.subcategory_title)} className="text-red-600 hover:underline ml-4">
+                Delete
+              </button>
             </td>
           </tr>
-        )}
+        ))}
       </tbody>
     </table>
   );

@@ -5,6 +5,7 @@ import DataTable from "./DataTable";
 import axios from "axios";
 import EditModal from "./EditModal";
 import AlertModal from "./AlertModal";
+import ConfirmDeleteModal from "./ConfirmDeleteModal"; // Import the ConfirmDeleteModal
 
 const SubCategory = () => {
   const [tableRows, setTableRows] = useState([]);
@@ -16,6 +17,9 @@ const SubCategory = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [subCategoryTitle, setSubCategoryTitle] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // For custom delete modal
+  const [deleteId, setDeleteId] = useState(null); // For the ID of the item to delete
+  const [deleteName, setDeleteName] = useState(""); // To show the name in the delete confirmation
 
   const token = localStorage.getItem("authToken");
 
@@ -85,77 +89,26 @@ const SubCategory = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this subcategory?")) {
-      try {
-        await axios.delete(`https://api.kamaee.pk/api/subcategories/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setTableRows((prevRows) => prevRows.filter((row) => row.id !== id));
-      } catch (error) {
-        console.error(
-          "Error deleting subcategory:",
-          error.response ? error.response.data : error.message
-        );
-        setError("Error deleting subcategory");
-      }
-    }
+  const handleDeleteClick = (id, name) => {
+    setDeleteId(id);  // Set the ID of the item to delete
+    setDeleteName(name); // Set the name for display in the modal
+    setIsDeleteModalOpen(true);  // Show the delete confirmation modal
   };
 
-  const handleModalSubmit = (updatedData) => {
-    setTableRows((prevRows) =>
-      prevRows.map((row) =>
-        row.id === updatedData.id
-          ? {
-              ...row,
-              subcategory_title: updatedData.subcategory_title,
-              category: updatedData.category_name, // Updated to display category name correctly
-            }
-          : row
-      )
-    );
-    setIsModalOpen(false);
-  };
-
-  const handleAddSubCategory = async () => {
-    if (!selectedCategory || !subCategoryTitle) {
-      alert("Please fill in all fields.");
-      return;
-    }
-
+  const handleDeleteConfirm = async () => {
     try {
-      const response = await axios.post(
-        "https://api.kamaee.pk/api/subcategory",
-        {
-          subcategory_title: subCategoryTitle,
-          category_id: parseInt(selectedCategory), // Ensure category ID is a number
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          maxBodyLength: Infinity,
-        }
-      );
-
-      setTableRows((prevRows) => [
-        ...prevRows,
-        {
-          id: response.data.subcategory.id,
-          subcategory_title: subCategoryTitle,
-          category: response.data.subcategory.category.category_name,
-        },
-      ]);
-      setIsAlertOpen(false);
-      setSelectedCategory("");
-      setSubCategoryTitle("");
+      await axios.delete(`https://api.kamaee.pk/api/subcategories/${deleteId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTableRows((prevRows) => prevRows.filter((row) => row.id !== deleteId));
+      setIsDeleteModalOpen(false);  // Close the delete confirmation modal
+      setDeleteId(null);  // Reset the ID state
     } catch (error) {
       console.error(
-        "Error adding subcategory:",
+        "Error deleting subcategory:",
         error.response ? error.response.data : error.message
       );
-      setError(
-        "Error adding subcategory: " +
-          (error.response ? error.response.data.message : error.message)
-      );
+      setError("Error deleting subcategory");
     }
   };
 
@@ -170,7 +123,11 @@ const SubCategory = () => {
   return (
     <div className="relative">
       <Card className="h-full w-full mt-10 overflow-scroll">
-        <DataTable rows={tableRows} onEdit={handleEdit} onDelete={handleDelete} />
+        <DataTable
+          rows={tableRows}
+          onEdit={handleEdit}
+          onDelete={(id, name) => handleDeleteClick(id, name)}  // Pass ID and name to the delete handler
+        />
       </Card>
       <div className="fixed bottom-6 right-6 group">
         <button
@@ -188,7 +145,20 @@ const SubCategory = () => {
         <EditModal
           subcategory={editData}
           categories={categories} // Pass categories to EditModal
-          onSubmit={handleModalSubmit}
+          onSubmit={(updatedData) => {
+            setTableRows((prevRows) =>
+              prevRows.map((row) =>
+                row.id === updatedData.id
+                  ? {
+                      ...row,
+                      subcategory_title: updatedData.subcategory_title,
+                      category: updatedData.category_name,
+                    }
+                  : row
+              )
+            );
+            setIsModalOpen(false);
+          }}
           onClose={() => setIsModalOpen(false)}
         />
       )}
@@ -200,8 +170,28 @@ const SubCategory = () => {
           setSelectedCategory={setSelectedCategory}
           subCategoryTitle={subCategoryTitle}
           setSubCategoryTitle={setSubCategoryTitle}
-          onSubmit={handleAddSubCategory}
+          onSubmit={() => {
+            setTableRows((prevRows) => [
+              ...prevRows,
+              {
+                id: Math.random(),
+                subcategory_title: subCategoryTitle,
+                category: categories.find(
+                  (cat) => cat.id === parseInt(selectedCategory)
+                ).category_name,
+              },
+            ]);
+            setIsAlertOpen(false);
+          }}
           onClose={() => setIsAlertOpen(false)}
+        />
+      )}
+
+      {isDeleteModalOpen && (
+        <ConfirmDeleteModal
+          itemName={deleteName}  // Pass the name to the confirmation modal
+          onDeleteConfirm={handleDeleteConfirm}
+          onClose={() => setIsDeleteModalOpen(false)}  // Close modal on cancel
         />
       )}
     </div>
