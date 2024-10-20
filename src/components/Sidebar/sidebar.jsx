@@ -28,7 +28,7 @@ const Sidebar = ({ onLogout }) => {
     "/gigs": "Gigs",
     "/user": "User",
     "/new-category": "Category",
-    "/new-subcategory": "Subcategory", // Updated here
+    
   };
 
   const getHeading = () => headings[location.pathname] || "";
