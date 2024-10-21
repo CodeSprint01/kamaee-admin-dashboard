@@ -8,7 +8,7 @@ const EditModal = ({ subcategory, categories, onSubmit, onClose }) => {
   useEffect(() => {
     if (subcategory) {
       setSubcategoryTitle(subcategory.subcategory_title);
-      setSelectedCategory(subcategory.category_id); // Assuming category_id is returned in the response
+      setSelectedCategory(subcategory.category_id); 
     }
   }, [subcategory]);
 
@@ -19,14 +19,14 @@ const EditModal = ({ subcategory, categories, onSubmit, onClose }) => {
       return;
     }
 
-    // Find the selected category name based on selectedCategory ID
+    
     const category = categories.find(cat => cat.id === parseInt(selectedCategory));
     const categoryName = category ? category.category_name : "";
 
     onSubmit({
       id: subcategory.id,
       subcategory_title: subcategoryTitle,
-      category_name: categoryName, // Send the category name instead of ID
+      category_name: categoryName, 
     });
   };
 

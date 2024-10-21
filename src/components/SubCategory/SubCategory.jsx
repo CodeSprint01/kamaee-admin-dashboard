@@ -5,7 +5,7 @@ import DataTable from "./DataTable";
 import axios from "axios";
 import EditModal from "./EditModal";
 import AlertModal from "./AlertModal";
-import ConfirmDeleteModal from "./ConfirmDeleteModal"; // Import the ConfirmDeleteModal
+import ConfirmDeleteModal from "./ConfirmDeleteModal"; 
 
 const SubCategory = () => {
   const [tableRows, setTableRows] = useState([]);
@@ -17,23 +17,11 @@ const SubCategory = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [subCategoryTitle, setSubCategoryTitle] = useState("");
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // For custom delete modal
-  const [deleteId, setDeleteId] = useState(null); // For the ID of the item to delete
-  const [deleteName, setDeleteName] = useState(""); // To show the name in the delete confirmation
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(null); 
+  const [deleteName, setDeleteName] = useState(""); 
 
   const token = localStorage.getItem("authToken");
-  // const handleApi = async () => {
-  //   try {
-  //     const response = await fetch("https://api.kamaee.pk/api/subcategory");
-  //     const data = await response.json();
-  //     console.log(data, "api response");
-  //     headers: {
-
-  //     }
-  //   } catch (error) {
-  //     console.log(error, "api response error");
-  //   }
-  // };
 
   const handleApi = () => {
     const URL = "https://api.kamaee.pk/api/subcategory";
@@ -119,25 +107,25 @@ const SubCategory = () => {
 
   const handleAddCategory = () => {
     setIsAlertOpen(true);
-    document.body.style.overflow = "hidden"; // Prevent background scrolling
+    document.body.style.overflow = "hidden"; 
   };
 
   const handleEdit = (row) => {
     if (row && row.id && row.subcategory_title) {
       setEditData(row);
-      setSelectedCategory(row.category_id); // Assuming category_id is returned in the response
+      setSelectedCategory(row.category_id); 
       setIsModalOpen(true);
-      document.body.style.overflow = "hidden"; // Prevent background scrolling
+      document.body.style.overflow = "hidden"; 
     } else {
       console.error("Invalid subcategory data:", row);
     }
   };
 
   const handleDeleteClick = (id, name) => {
-    setDeleteId(id); // Set the ID of the item to delete
-    setDeleteName(name); // Set the name for display in the modal
-    setIsDeleteModalOpen(true); // Show the delete confirmation modal
-    document.body.style.overflow = "hidden"; // Prevent background scrolling
+    setDeleteId(id); 
+    setDeleteName(name);
+    setIsDeleteModalOpen(true); 
+    document.body.style.overflow = "hidden"; 
   };
 
   const handleDeleteConfirm = async () => {
@@ -149,9 +137,9 @@ const SubCategory = () => {
         }
       );
       setTableRows((prevRows) => prevRows.filter((row) => row.id !== deleteId));
-      setIsDeleteModalOpen(false); // Close the delete confirmation modal
-      setDeleteId(null); // Reset the ID state
-      document.body.style.overflow = "auto"; // Re-enable background scrolling
+      setIsDeleteModalOpen(false); 
+      setDeleteId(null); 
+      document.body.style.overflow = "auto"; 
     } catch (error) {
       console.error(
         "Error deleting subcategory:",
@@ -163,12 +151,12 @@ const SubCategory = () => {
 
   const closeAlertModal = () => {
     setIsAlertOpen(false);
-    document.body.style.overflow = "auto"; // Re-enable background scrolling
+    document.body.style.overflow = "auto"; 
   };
 
   const closeEditModal = () => {
     setIsModalOpen(false);
-    document.body.style.overflow = "auto"; // Re-enable background scrolling
+    document.body.style.overflow = "auto"; 
   };
 
   if (loading) {
@@ -185,7 +173,7 @@ const SubCategory = () => {
         <DataTable
           rows={tableRows}
           onEdit={handleEdit}
-          onDelete={(id, name) => handleDeleteClick(id, name)} // Pass ID and name to the delete handler
+          onDelete={(id, name) => handleDeleteClick(id, name)} 
         />
       </Card>
       <div className="fixed bottom-6 right-6 group">
@@ -203,7 +191,7 @@ const SubCategory = () => {
       {isModalOpen && (
         <EditModal
           subcategory={editData}
-          categories={categories} // Pass categories to EditModal
+          categories={categories} 
           onSubmit={(updatedData) => {
             setTableRows((prevRows) =>
               prevRows.map((row) =>
@@ -250,11 +238,11 @@ const SubCategory = () => {
 
       {isDeleteModalOpen && (
         <ConfirmDeleteModal
-          itemName={deleteName} // Pass the name to the confirmation modal
+          itemName={deleteName} 
           onDeleteConfirm={handleDeleteConfirm}
           onClose={() => {
-            setIsDeleteModalOpen(false); // Close modal on cancel
-            document.body.style.overflow = "auto"; // Re-enable background scrolling
+            setIsDeleteModalOpen(false); 
+            document.body.style.overflow = "auto"; 
           }}
         />
       )}

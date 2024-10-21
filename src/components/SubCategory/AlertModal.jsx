@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { Button } from "@material-tailwind/react";
 
 const AlertModal = ({ categories, selectedCategory, setSelectedCategory, subCategoryTitle, setSubCategoryTitle, onSubmit, onClose }) => {
-  // Use effect to manage body scroll
+
   useEffect(() => {
-    // Disable scrolling when modal is open
+    
     document.body.style.overflow = "hidden";
     
-    // Enable scrolling when modal is closed
+   
     return () => {
       document.body.style.overflow = "auto";
     };
