@@ -45,8 +45,8 @@ const AlertModal = ({ categories, selectedCategory, setSelectedCategory, subCate
             </select>
           </div>
           <div className="flex justify-between">
-            <Button type="submit" className="bg-[#0054ba] text-white">Add</Button>
-            <Button type="button" onClick={onClose} className="text-gray-500">Cancel</Button>
+            <Button type="submit" className=" p-2 text-xs text-white bg-[#0054ba]  group-hover:opacity-100 transition-opacity duration-300">Add</Button>
+            <Button type="button" onClick={onClose} className="p-2 text-xs text-white bg-[#0054ba]  group-hover:opacity-100 transition-opacity duration-300">Cancel</Button>
           </div>
         </form>
       </div>

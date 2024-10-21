@@ -97,7 +97,7 @@ const SubCategory = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`https://api.kamaee.pk/api/subcategories/${deleteId}`, {
+      await axios.delete(`https://api.kamaee.pk/api/delete/subcategory/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTableRows((prevRows) => prevRows.filter((row) => row.id !== deleteId));
