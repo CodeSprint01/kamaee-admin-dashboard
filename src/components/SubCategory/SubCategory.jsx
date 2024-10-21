@@ -22,6 +22,45 @@ const SubCategory = () => {
   const [deleteName, setDeleteName] = useState(""); // To show the name in the delete confirmation
 
   const token = localStorage.getItem("authToken");
+  // const handleApi = async () => {
+  //   try {
+  //     const response = await fetch("https://api.kamaee.pk/api/subcategory");
+  //     const data = await response.json();
+  //     console.log(data, "api response");
+  //     headers: {
+
+  //     }
+  //   } catch (error) {
+  //     console.log(error, "api response error");
+  //   }
+  // };
+
+  const handleApi = () => {
+    const URL = "https://api.kamaee.pk/api/subcategory";
+    const token = localStorage.getItem("authToken");
+
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+  };
+  
+  const bodyParameters = {
+    subcategory_title: subCategoryTitle,
+    category_id: Number(selectedCategory)
+  };
+  axios.post( 
+    URL,
+    bodyParameters,
+    config
+  ).then(response => {
+    console.log("response", response)
+ }) 
+ .catch(err => {
+    console.log("err", err);
+ });
+    
+
+  };
+
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -54,9 +93,12 @@ const SubCategory = () => {
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("https://api.kamaee.pk/api/categories", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          "https://api.kamaee.pk/api/categories",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         if (Array.isArray(response.data.category)) {
           setCategories(response.data.category);
@@ -77,7 +119,7 @@ const SubCategory = () => {
 
   const handleAddCategory = () => {
     setIsAlertOpen(true);
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    document.body.style.overflow = "hidden"; // Prevent background scrolling
   };
 
   const handleEdit = (row) => {
@@ -85,28 +127,31 @@ const SubCategory = () => {
       setEditData(row);
       setSelectedCategory(row.category_id); // Assuming category_id is returned in the response
       setIsModalOpen(true);
-      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+      document.body.style.overflow = "hidden"; // Prevent background scrolling
     } else {
       console.error("Invalid subcategory data:", row);
     }
   };
 
   const handleDeleteClick = (id, name) => {
-    setDeleteId(id);  // Set the ID of the item to delete
+    setDeleteId(id); // Set the ID of the item to delete
     setDeleteName(name); // Set the name for display in the modal
-    setIsDeleteModalOpen(true);  // Show the delete confirmation modal
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    setIsDeleteModalOpen(true); // Show the delete confirmation modal
+    document.body.style.overflow = "hidden"; // Prevent background scrolling
   };
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(`https://api.kamaee.pk/api/delete/subcategory/${deleteId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `https://api.kamaee.pk/api/delete/subcategory/${deleteId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setTableRows((prevRows) => prevRows.filter((row) => row.id !== deleteId));
-      setIsDeleteModalOpen(false);  // Close the delete confirmation modal
-      setDeleteId(null);  // Reset the ID state
-      document.body.style.overflow = 'auto'; // Re-enable background scrolling
+      setIsDeleteModalOpen(false); // Close the delete confirmation modal
+      setDeleteId(null); // Reset the ID state
+      document.body.style.overflow = "auto"; // Re-enable background scrolling
     } catch (error) {
       console.error(
         "Error deleting subcategory:",
@@ -118,12 +163,12 @@ const SubCategory = () => {
 
   const closeAlertModal = () => {
     setIsAlertOpen(false);
-    document.body.style.overflow = 'auto'; // Re-enable background scrolling
+    document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
 
   const closeEditModal = () => {
     setIsModalOpen(false);
-    document.body.style.overflow = 'auto'; // Re-enable background scrolling
+    document.body.style.overflow = "auto"; // Re-enable background scrolling
   };
 
   if (loading) {
@@ -140,7 +185,7 @@ const SubCategory = () => {
         <DataTable
           rows={tableRows}
           onEdit={handleEdit}
-          onDelete={(id, name) => handleDeleteClick(id, name)}  // Pass ID and name to the delete handler
+          onDelete={(id, name) => handleDeleteClick(id, name)} // Pass ID and name to the delete handler
         />
       </Card>
       <div className="fixed bottom-6 right-6 group">
@@ -172,6 +217,7 @@ const SubCategory = () => {
               )
             );
             closeEditModal();
+          
           }}
           onClose={closeEditModal}
         />
@@ -196,6 +242,7 @@ const SubCategory = () => {
               },
             ]);
             closeAlertModal();
+            handleApi()
           }}
           onClose={closeAlertModal}
         />
@@ -203,11 +250,11 @@ const SubCategory = () => {
 
       {isDeleteModalOpen && (
         <ConfirmDeleteModal
-          itemName={deleteName}  // Pass the name to the confirmation modal
+          itemName={deleteName} // Pass the name to the confirmation modal
           onDeleteConfirm={handleDeleteConfirm}
           onClose={() => {
-            setIsDeleteModalOpen(false);  // Close modal on cancel
-            document.body.style.overflow = 'auto'; // Re-enable background scrolling
+            setIsDeleteModalOpen(false); // Close modal on cancel
+            document.body.style.overflow = "auto"; // Re-enable background scrolling
           }}
         />
       )}
