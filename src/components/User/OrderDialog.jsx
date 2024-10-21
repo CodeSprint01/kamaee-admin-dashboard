@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Typography } from '@material-tailwind/react';
 
 const OrderDialog = ({ open, onClose, orders }) => {
+  const [filterType, setFilterType] = useState('orderId'); // 'orderId' or 'orderMethod'
+  const [searchTerm, setSearchTerm] = useState('');
+
   if (!open) return null;
+
+  // Filter orders based on search term and filter type
+  const filteredOrders = orders.filter((order) => {
+    if (filterType === 'orderId') {
+      return order.id.toString().includes(searchTerm);
+    } else if (filterType === 'orderMethod') {
+      return order.delivery_method.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+    return true;
+  });
 
   return (
     <div 
@@ -23,7 +36,30 @@ const OrderDialog = ({ open, onClose, orders }) => {
         </button>
 
         <h2 className="text-2xl font-semibold mb-4 text-center">User Orders</h2>
-        {orders.length > 0 ? (
+
+        {/* Filter Section */}
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex space-x-2"> {/* Flex container for side-by-side layout */}
+            <select 
+              value={filterType} 
+              onChange={(e) => setFilterType(e.target.value)} 
+              className="border border-gray-300 p-2 rounded"
+            >
+              <option value="orderId">Order ID</option>
+              <option value="orderMethod">Order Method</option>
+            </select>
+
+            <input 
+              type="text" 
+              placeholder="Search..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="border border-gray-300 p-2 rounded"
+            />
+          </div>
+        </div>
+
+        {filteredOrders.length > 0 ? (
           <table className="min-w-full bg-white border border-gray-300">
             <thead>
               <tr>
@@ -35,7 +71,7 @@ const OrderDialog = ({ open, onClose, orders }) => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
+              {filteredOrders.map((order) => (
                 <tr key={order.id}>
                   <td className="border-b border-gray-300 p-2">{order.id}</td>
                   <td className="border-b border-gray-300 p-2">{order.total_amount}</td>

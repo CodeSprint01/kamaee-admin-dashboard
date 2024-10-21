@@ -2,23 +2,28 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
 import { Typography } from '@material-tailwind/react';
+import { FaTimes } from 'react-icons/fa'; 
 import OrderDialog from './OrderDialog'; 
-import FriendsDialog from './FriendsDialog.jsx'; 
+import FriendsDialog from './FriendsDialog'; 
+import EditDialog from './EditDialog';
 
 const User = () => {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedOrders, setSelectedOrders] = useState([]); 
-  const [selectedFriends, setSelectedFriends] = useState([]); 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState('email');
+  const [selectedOrders, setSelectedOrders] = useState([]);
+  const [selectedFriends, setSelectedFriends] = useState([]);
   const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
   const [isFriendsDialogOpen, setIsFriendsDialogOpen] = useState(false);
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDMsIm90cFRpbWUiOm51bGwsImZpcnN0X25hbWUiOiJBcmhhbSIsImxhc3RfbmFtZSI6IlNhcndhciIsImVtYWlsIjoiYXJoYW1zYXJ3YXJzZWN1cmVob3BzQGdtYWlsLmNvbSIsImNuaWMiOiIzMjkzMjc0ODkzNzU4IiwiaXNBY3RpdmUiOnRydWUsInJvbGUiOiJzZWxsZXIiLCJzdGF0dXMiOm51bGwsImFjY291bnRfc3RhdHVzIjpudWxsLCJwaG9uZV9udW1iZXIiOiIwMzAxMTExMTExMSIsImJpa2VfbnVtYmVyIjpudWxsLCJhZGRyZXNzIjoiU2VjdXJlaG9wc0BnbWFpbC5jb20iLCJpbWFnZSI6bnVsbCwicmF0aW5ncyI6bnVsbCwiY3JlYXRlZF9ieSI6bnVsbCwib3RwIjpudWxsLCJjcmVhdGVkQXQiOiIyMDI0LTEwLTE3VDA3OjM2OjIwLjkwNFoiLCJ1cGRhdGVkQXQiOiIyMDI0LTEwLTE3VDA3OjM2OjIwLjkwNFoiLCJsb2NhdGlvbiI6eyJpZCI6NDMsInVzZXJfaWQiOjQzLCJsYXRpdHVkZSI6MzUuOTk5LCJsb25naXR1ZGUiOjQ1LCJjcmVhdGVkQXQiOiIyMDI0LTEwLTE3VDA3OjM2OjIwLjkxM1oiLCJ1cGRhdGVkQXQiOiIyMDI0LTEwLTE3VDA3OjM2OjIwLjkxM1oifSwiaWF0IjoxNzI5MTUxNDg2LCJleHAiOjE3MzY5Mjc0ODZ9.FFwbBh8P2qZFlKAtT-xMD6MwBV44DBjXYx3b4Wtqugg"; 
+
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksIm90cFRpbWUiOm51bGwsImZpcnN0X25hbWUiOiJBbGkiLCJsYXN0X25hbWUiOiJSYXphIiwiZW1haWwiOiJhbGlyYXphMTE4MDQxQGdtYWlsLmNvbSIsImNuaWMiOiIzNTMwMjg1ODk3NTY1IiwiaXNBY3RpdmUiOnRydWUsInJvbGUiOiJidXllciIsInN0YXR1cyI6bnVsbCwiYWNjb3VudF9zdGF0dXMiOm51bGwsInBob25lX251bWJlciI6IjAzMDExMzM5MzgxIiwiYmlrZV9udW1iZXIiOm51bGwsImFkZHJlc3MiOiJMYWtzaG1pIENob3drIExhaG9yZSIsImltYWdlIjpudWxsLCJyYXRpbmdzIjpudWxsLCJjcmVhdGVkX2J5IjpudWxsLCJvdHAiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTkwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMTdUMTk6MTA6MTQuMDAwWiIsImxvY2F0aW9uIjp7ImlkIjozOSwidXNlcl9pZCI6MzksImxhdGl0dWRlIjozNS45OTksImxvbmdpdHVkZSI6NDUsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTk0WiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTk0WiJ9LCJpYXQiOjE3MjkyNDY5NDcsImV4cCI6MTczNzAyMjk0N30.4tMJ388Ge9NpOJlQmqnXE6cGCWQQIrbhVuRUaUzkWpE"; 
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -29,6 +34,7 @@ const User = () => {
           },
         });
         setUsers(response.data);
+        setFilteredUsers(response.data);
       } catch (error) {
         setError("Error fetching users");
       } finally {
@@ -39,9 +45,28 @@ const User = () => {
     fetchUsers();
   }, [token]);
 
+  useEffect(() => {
+    const filtered = users.filter(user => {
+      if (filterType === 'email') {
+        return user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false;
+      } else if (filterType === 'phone') {
+        return user.phone_number?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false;
+      } else if (filterType === 'cnic') {
+        return user.cnic?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false;
+      } else {
+        return false;
+      }
+    });
+    setFilteredUsers(filtered);
+  }, [searchTerm, filterType, users]);
+
   const handleViewOrders = (orders) => {
     setSelectedOrders(orders); 
     setIsOrderDialogOpen(true); 
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm(''); // Clear the search term
   };
 
   const handleViewFriends = (friends) => {
@@ -67,7 +92,6 @@ const User = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-       
         setUsers(users.filter(user => user.id !== userToDelete));
       } catch (error) {
         setError("Error deleting user");
@@ -82,16 +106,14 @@ const User = () => {
     setUserToDelete(null);
   };
 
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
+  const handleEditSubmit = async (userData) => {
     try {
-      await axios.put(`https://api.kamaee.pk/api/users/${currentUser.id}`, currentUser, {
+      await axios.put(`https://api.kamaee.pk/api/users/${userData.id}`, userData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      // Refresh the user list
-      setUsers(users.map(user => (user.id === currentUser.id ? currentUser : user)));
+      setUsers(users.map(user => (user.id === userData.id ? userData : user)));
     } catch (error) {
       setError("Error updating user");
     }
@@ -110,261 +132,175 @@ const User = () => {
   const TABLE_HEAD = ["First Name", "Last Name", "Email", "Phone Number", "CNIC", "Status", "Image", "Orders", "Friends", "Actions"];
 
   return (
-    <div className="mt-15 mx-7">
-      <div className="">
-        {/* Scrollable container for the table */}
-        <div className="overflow-x-scroll">
-          <table className="min-w-full bg-white border border-gray-300">
-            <thead>
-              <tr>
-                {TABLE_HEAD.map((head) => (
-                  <th key={head} className="border-b border-gray-300 bg-gray-200 p-4">
-                    <Typography variant="small" color="blue-gray" className="font-bold leading-none opacity-70">
-                      {head}
-                    </Typography>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {users.length === 0 ? (
-                <tr>
-                  <td colSpan={TABLE_HEAD.length} className="p-4 text-center">
-                    <Typography variant="small" color="blue-gray" className="font-normal">
-                      No users available
-                    </Typography>
-                  </td>
-                </tr>
-              ) : (
-                users.map((user, index) => {
-                  const isLast = index === users.length - 1;
-                  const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
-
-                  return (
-                    <tr key={user.id} className={index % 2 !== 0 ? "bg-gray-100" : ""}>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {user.first_name}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {user.last_name}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {user.email}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {user.phone_number}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {user.cnic}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        {user.isActive ? (
-                          <AiFillCheckCircle className="text-green-500 text-xl" />
-                        ) : (
-                          <AiFillCloseCircle className="text-red-500 text-xl" />
-                        )}
-                      </td>
-                      <td className={classes}>
-                        <img
-                          src={`https://api.kamaee.pk${user.image}`}
-                          alt={user.first_name}
-                          className="w-16 h-16 object-cover rounded"
-                        />
-                      </td>
-                      <td className={classes}>
-                        <button
-                          onClick={() => handleViewOrders(user.orders)}
-                          className="text-pink-600 hover:underline"
-                        >
-                          View Orders
-                        </button>
-                      </td>
-                      <td className={classes}>
-                        <button
-                          onClick={() => handleViewFriends(user.friends)} 
-                          className="text-pink-600 hover:underline"
-                        >
-                          View Friends
-                        </button>
-                      </td>
-                      <td className={classes + " flex space-x-2"}>
-                        {/* Edit Button */}
-                        <button
-                          onClick={() => handleEditUser(user)}
-                          className="text-blue-600 hover:underline"
-                        >
-                          Edit
-                        </button>
-                        {/* Delete Button */}
-                        <button
-                          onClick={() => handleDeleteUser(user.id)}
-                          className="text-red-600 hover:underline"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+    <div className="mt-15">
+      {/* Search and Filter Section */}
+      <div className="mb-4 flex items-center">
+        <div className="mr-4 ">
+          <select
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+            className="border border-gray-300 p-2 rounded"
+          >
+            <option value="email">Email</option>
+            <option value="phone">Phone</option>
+            <option value="cnic">CNIC</option>
+          </select>
         </div>
+
+        <input
+          type="text"
+          placeholder={`Search by ${filterType}...`}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border border-gray-300 p-2 rounded w-full"
+        />
+
+{searchTerm && (
+            <button
+              onClick={handleClearSearch}
+              className="absolute right-10 top-3/3 transform -translate-y-3/2 text-gray-500"
+              aria-label="Clear Search"
+            >
+              <FaTimes />
+            </button>
+          )}
       </div>
 
-      {/* Order Dialog */}
-      <OrderDialog
-        open={isOrderDialogOpen}
-        onClose={() => setIsOrderDialogOpen(false)}
-        orders={selectedOrders}
-      />
+      {/* Scrollable container for the table */}
+      <div className="overflow-x-scroll ">
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead>
+            <tr>
+              {TABLE_HEAD.map((head) => (
+                <th key={head} className="border-b border-gray-300 bg-gray-200 p-4">
+                  <Typography variant="small" color="blue-gray" className="font-bold leading-none opacity-70">
+                    {head}
+                  </Typography>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredUsers.length === 0 ? (
+              <tr>
+                <td colSpan={TABLE_HEAD.length} className="p-4 text-center">
+                  <Typography variant="small" color="blue-gray" className="font-normal">
+                    No users available
+                  </Typography>
+                </td>
+              </tr>
+            ) : (
+              filteredUsers.map((user, index) => {
+                const isLast = index === filteredUsers.length - 1;
+                const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
 
-      {/* Friends Dialog */}
-      <FriendsDialog
-        open={isFriendsDialogOpen}
-        onClose={() => setIsFriendsDialogOpen(false)}
-        friends={selectedFriends}
+                return (
+                  <tr key={user.id} className={index % 2 !== 0 ? "bg-gray-100" : ""}>
+                    <td className={classes}>
+                      <Typography variant="small" color="blue-gray" className="font-normal">
+                        {user.first_name}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography variant="small" color="blue-gray" className="font-normal">
+                        {user.last_name}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography variant="small" color="blue-gray" className="font-normal">
+                        {user.email}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography variant="small" color="blue-gray" className="font-normal">
+                        {user.phone_number}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography variant="small" color="blue-gray" className="font-normal">
+                        {user.cnic}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      {user.isActive ? (
+                        <AiFillCheckCircle className="text-green-500 text-xl" />
+                      ) : (
+                        <AiFillCloseCircle className="text-red-500 text-xl" />
+                      )}
+                    </td>
+                    <td className={classes}>
+                      <img
+                        src={`https://api.kamaee.pk${user.image}`}
+                        alt={user.first_name}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    </td>
+                    <td className={classes}>
+                      <button
+                        onClick={() => handleViewOrders(user.orders)}
+                        className="text-pink-600 hover:underline"
+                      >
+                        View Orders
+                      </button>
+                    </td>
+                    <td className={classes}>
+                      <button
+                        onClick={() => handleViewFriends(user.friends)} 
+                        className="text-pink-600 hover:underline"
+                      >
+                        View Friends
+                      </button>
+                    </td>
+                    <td className={classes}>
+                      <button
+                        onClick={() => handleEditUser(user)} 
+                        className="text-blue-600 hover:underline"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteUser(user.id)} 
+                        className="text-red-600 hover:underline ml-2"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Dialog Components */}
+      <OrderDialog 
+        open={isOrderDialogOpen} 
+        orders={selectedOrders} 
+        onClose={() => setIsOrderDialogOpen(false)} 
+      />
+      <FriendsDialog 
+        open={isFriendsDialogOpen} 
+        friends={selectedFriends} 
+        onClose={() => setIsFriendsDialogOpen(false)} 
+      />
+      <EditDialog 
+        open={isEditDialogOpen} 
+        user={currentUser} 
+        onClose={() => setIsEditDialogOpen(false)} 
+        onSubmit={handleEditSubmit} 
       />
 
       {/* Delete Confirmation Dialog */}
       {isDeleteConfirmationOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded shadow-lg">
-            <Typography variant="h6" color="blue-gray" className="mb-4">
-              Are you sure you want to delete this user?
-            </Typography>
-            <div className="flex justify-end space-x-2">
-              <button 
-                onClick={cancelDelete} 
-                className="bg-gray-300 text-gray-700 py-1 px-4 rounded"
-              >
-                Cancel
-              </button>
-              <button 
-                onClick={confirmDelete} 
-                className="bg-red-600 text-white py-1 px-4 rounded"
-              >
-                Delete
-              </button>
+            <h2 className="text-lg font-semibold">Are you sure you want to delete this user?</h2>
+            <div className="flex justify-end mt-4">
+              <button onClick={cancelDelete} className="mr-2 bg-gray-300 p-2 rounded">Cancel</button>
+              <button onClick={confirmDelete} className="bg-red-600 text-white p-2 rounded">Delete</button>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Edit User Dialog */}
-      {isEditDialogOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <form
-            onSubmit={handleEditSubmit}
-            className="bg-white p-4 rounded shadow-lg w-80 max-h-[60vh] overflow-y-auto"
-          >
-            <Typography variant="h6" color="blue-gray" className="mb-4">
-              Edit User
-            </Typography>
-            <div className="flex flex-col space-y-2">
-              <input
-                type="text"
-                placeholder="First Name"
-                value={currentUser.first_name}
-                onChange={(e) => setCurrentUser({ ...currentUser, first_name: e.target.value })}
-                className="border border-gray-300 p-2 rounded"
-              />
-              <input
-                type="text"
-                placeholder="Last Name"
-                value={currentUser.last_name}
-                onChange={(e) => setCurrentUser({ ...currentUser, last_name: e.target.value })}
-                className="border border-gray-300 p-2 rounded"
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                value={currentUser.email}
-                onChange={(e) => setCurrentUser({ ...currentUser, email: e.target.value })}
-                className="border border-gray-300 p-2 rounded"
-              />
-              <input
-                type="text"
-                placeholder="CNIC"
-                value={currentUser.cnic}
-                onChange={(e) => setCurrentUser({ ...currentUser, cnic: e.target.value })}
-                className="border border-gray-300 p-2 rounded"
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                value={currentUser.password}
-                onChange={(e) => setCurrentUser({ ...currentUser, password: e.target.value })}
-                className="border border-gray-300 p-2 rounded"
-              />
-              <input
-                type="text"
-                placeholder="Role"
-                value={currentUser.role}
-                onChange={(e) => setCurrentUser({ ...currentUser, role: e.target.value })}
-                className="border border-gray-300 p-2 rounded"
-              />
-              <input
-                type="text"
-                placeholder="Phone Number"
-                value={currentUser.phone_number}
-                onChange={(e) => setCurrentUser({ ...currentUser, phone_number: e.target.value })}
-                className="border border-gray-300 p-2 rounded"
-              />
-              <input
-                type="text"
-                placeholder="Latitude"
-                value={currentUser.latitude}
-                onChange={(e) => setCurrentUser({ ...currentUser, latitude: e.target.value })}
-                className="border border-gray-300 p-2 rounded"
-              />
-              <input
-                type="text"
-                placeholder="Longitude"
-                value={currentUser.longitude}
-                onChange={(e) => setCurrentUser({ ...currentUser, longitude: e.target.value })}
-                className="border border-gray-300 p-2 rounded"
-              />
-              <input
-                type="text"
-                placeholder="Account Number"
-                value={currentUser.account_number}
-                onChange={(e) => setCurrentUser({ ...currentUser, account_number: e.target.value })}
-                className="border border-gray-300 p-2 rounded"
-              />
-              <input
-                type="text"
-                placeholder="Payment Type"
-                value={currentUser.payment_type}
-                onChange={(e) => setCurrentUser({ ...currentUser, payment_type: e.target.value })}
-                className="border border-gray-300 p-2 rounded"
-              />
-            </div>
-            <div className="flex justify-end space-x-2 mt-4">
-              <button 
-                onClick={() => setIsEditDialogOpen(false)} 
-                className="bg-gray-300 text-gray-700 py-1 px-4 rounded"
-              >
-                Cancel
-              </button>
-              <button 
-                type="submit" 
-                className="bg-blue-600 text-white py-1 px-4 rounded"
-              >
-                Save Changes
-              </button>
-            </div>
-          </form>
         </div>
       )}
     </div>
