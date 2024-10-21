@@ -77,6 +77,7 @@ const SubCategory = () => {
 
   const handleAddCategory = () => {
     setIsAlertOpen(true);
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
   };
 
   const handleEdit = (row) => {
@@ -84,6 +85,7 @@ const SubCategory = () => {
       setEditData(row);
       setSelectedCategory(row.category_id); // Assuming category_id is returned in the response
       setIsModalOpen(true);
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
     } else {
       console.error("Invalid subcategory data:", row);
     }
@@ -93,6 +95,7 @@ const SubCategory = () => {
     setDeleteId(id);  // Set the ID of the item to delete
     setDeleteName(name); // Set the name for display in the modal
     setIsDeleteModalOpen(true);  // Show the delete confirmation modal
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
   };
 
   const handleDeleteConfirm = async () => {
@@ -103,6 +106,7 @@ const SubCategory = () => {
       setTableRows((prevRows) => prevRows.filter((row) => row.id !== deleteId));
       setIsDeleteModalOpen(false);  // Close the delete confirmation modal
       setDeleteId(null);  // Reset the ID state
+      document.body.style.overflow = 'auto'; // Re-enable background scrolling
     } catch (error) {
       console.error(
         "Error deleting subcategory:",
@@ -110,6 +114,16 @@ const SubCategory = () => {
       );
       setError("Error deleting subcategory");
     }
+  };
+
+  const closeAlertModal = () => {
+    setIsAlertOpen(false);
+    document.body.style.overflow = 'auto'; // Re-enable background scrolling
+  };
+
+  const closeEditModal = () => {
+    setIsModalOpen(false);
+    document.body.style.overflow = 'auto'; // Re-enable background scrolling
   };
 
   if (loading) {
@@ -157,9 +171,9 @@ const SubCategory = () => {
                   : row
               )
             );
-            setIsModalOpen(false);
+            closeEditModal();
           }}
-          onClose={() => setIsModalOpen(false)}
+          onClose={closeEditModal}
         />
       )}
 
@@ -181,9 +195,9 @@ const SubCategory = () => {
                 ).category_name,
               },
             ]);
-            setIsAlertOpen(false);
+            closeAlertModal();
           }}
-          onClose={() => setIsAlertOpen(false)}
+          onClose={closeAlertModal}
         />
       )}
 
@@ -191,7 +205,10 @@ const SubCategory = () => {
         <ConfirmDeleteModal
           itemName={deleteName}  // Pass the name to the confirmation modal
           onDeleteConfirm={handleDeleteConfirm}
-          onClose={() => setIsDeleteModalOpen(false)}  // Close modal on cancel
+          onClose={() => {
+            setIsDeleteModalOpen(false);  // Close modal on cancel
+            document.body.style.overflow = 'auto'; // Re-enable background scrolling
+          }}
         />
       )}
     </div>
