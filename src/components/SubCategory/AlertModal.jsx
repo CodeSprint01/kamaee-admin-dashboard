@@ -1,63 +1,52 @@
-import React from 'react';
+import React from "react";
+import { Button } from "@material-tailwind/react";
 
-const AlertModal = ({
-  categories,
-  selectedCategory,
-  setSelectedCategory,
-  subCategoryTitle,
-  setSubCategoryTitle,
-  onSubmit,
-  onClose,
-}) => {
+const AlertModal = ({ categories, selectedCategory, setSelectedCategory, subCategoryTitle, setSubCategoryTitle, onSubmit, onClose }) => {
+  const handleAddSubCategory = (e) => {
+    e.preventDefault();
+    if (!subCategoryTitle || !selectedCategory) {
+      alert("Please fill in all fields.");
+      return;
+    }
+    onSubmit();
+    setSubCategoryTitle("");
+    setSelectedCategory("");
+  };
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg w-96">
-        <h2 className="text-xl font-semibold mb-4">Add New Subcategory</h2>
-        <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>
-          <div>
-            <label htmlFor="subcategory-title">SubCategory Title:</label>
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-1/3">
+        <h2 className="text-lg font-semibold mb-4">Add New Subcategory</h2>
+        <form onSubmit={handleAddSubCategory}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Subcategory Title</label>
             <input
               type="text"
-              id="subcategory-title"
               value={subCategoryTitle}
               onChange={(e) => setSubCategoryTitle(e.target.value)}
+              className="border border-gray-300 rounded-md p-2 w-full"
               required
-              className="ml-3 border border-black"
             />
           </div>
-
-          <div className="mt-4">
-            <label htmlFor="category-dropdown">Select Category:</label>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Category</label>
             <select
-              id="category-dropdown"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
+              className="border border-gray-300 rounded-md p-2 w-full"
               required
-              className="ml-3 border border-black"
             >
               <option value="" disabled>Select a category</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.category_name}
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.category_name}
                 </option>
               ))}
             </select>
           </div>
-
-          <div className="flex justify-end mt-10">
-            <button
-              type="submit"
-              className="bg-slate-600 text-white p-2 rounded mt-4"
-            >
-              Add Subcategory
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="bg-red-500 text-white p-2 rounded ml-2 mt-4"
-            >
-              Cancel
-            </button>
+          <div className="flex justify-between">
+            <Button type="submit" className="bg-[#0054ba] text-white">Add</Button>
+            <Button type="button" onClick={onClose} className="text-gray-500">Cancel</Button>
           </div>
         </form>
       </div>
