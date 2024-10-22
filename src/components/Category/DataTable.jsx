@@ -21,7 +21,7 @@ const DataTable = ({ rows }) => {
   return (
     <div>
       {/* Search Input */}
-      <div className="mb-4 relative">
+      <div className="mb-4 mt-7 relative">
         <input
           type="text"
           placeholder="Search by Name..."

@@ -30,7 +30,7 @@ function Layout({ onLogout }) {
       <Sidebar onLogout={onLogout} />
       <div className="flex-1 transition-all mt-9 md:mt-3 xl:mt-3 lg:mt-3 duration-300 sm:ml-0 md:ml-52 lg:ml-48 xl:ml-48 lg:p-4 overflow-hidden">
         <Header heading={getHeading()} />
-        <div className="mt-14 md:p-4">
+        <div className="mt-7 md:p-4">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/category" element={<Category />} />

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Typography } from "@material-tailwind/react";
+import { FaTimes } from 'react-icons/fa';
 
 const DataTable = ({ rows, onEdit, onDelete }) => {
   const TABLE_HEAD = ["Subcategory Title", "Category", "Created At", "Actions"];
@@ -18,18 +19,29 @@ const DataTable = ({ rows, onEdit, onDelete }) => {
   const filteredRows = rows.filter(row =>
     row.subcategory_title.toLowerCase().includes(searchTerm.toLowerCase())
   );
+console.log("filteredRows", filteredRows);
 
   return (
-    <div className=" flex flex-col">
+    <div className="">
      
-    <div className="mb-4">
+    <div className="mb-4 relative">
         <input
           type="text"
           placeholder="Search Subcategories..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border border-gray-300 rounded-md p-2 w-96"
+          className="border border-gray-300 p-1 rounded w-1/3 pr-10 "
         />
+
+{searchTerm && (
+          <button
+            onClick={() => setSearchTerm("")}
+            className="absolute  top-5 transform -translate-x-5 -translate-y-1/2 text-gray-600 hover:text-blue-500 text-lg"
+            aria-label="Clear Search"
+          >
+            <FaTimes />
+          </button>
+           )}
       </div>
       
       <table className="w-full min-w-max table-auto text-left border border-gray-300">

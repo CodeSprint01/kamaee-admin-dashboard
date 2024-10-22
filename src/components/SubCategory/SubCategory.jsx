@@ -24,6 +24,7 @@ const SubCategory = () => {
 
   const token = localStorage.getItem("authToken");
 
+  // Function to handle adding subcategories
   const handleApi = async () => {
     const URL = "https://api.kamaee.pk/api/subcategory";
     const config = {
@@ -40,6 +41,38 @@ const SubCategory = () => {
       console.log("response", response);
     } catch (err) {
       console.log("err", err);
+    }
+  };
+console.log("selectedCategory", selectedCategory);
+
+  // Function to handle updating subcategories
+  const handleUpdateApi = async (id) => {
+    const URL = `https://api.kamaee.pk/api/update/subcategory/${id}`;
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+
+    const bodyParameters = {
+      subcategory_title: subCategoryTitle,
+      category_id: Number(selectedCategory)
+    };
+
+    try {
+      const response = await axios.post(URL, bodyParameters, config);
+      console.log("Update response", response);
+      setTableRows((prevRows) =>
+        prevRows.map((row) =>
+          row.id === id
+            ? {
+                ...row,
+                subcategory_title: subCategoryTitle,
+                category: categories.find(cat => cat.id === Number(selectedCategory)).category_name,
+              }
+            : row
+        )
+      );
+    } catch (err) {
+      console.log("Update error", err);
     }
   };
 
@@ -91,10 +124,12 @@ const SubCategory = () => {
     document.body.style.overflow = "hidden"; 
   };
 
-  const handleEdit = (row) => {
+  const handleEdit = (row) => {      
+
     if (row && row.id && row.subcategory_title) {
       setEditData(row);
-      setSelectedCategory(row.category_id); 
+      // setSelectedCategory(row.category_id); 
+      setSubCategoryTitle(row.subcategory_title); // Set title for edit
       setIsModalOpen(true);
       document.body.style.overflow = "hidden"; 
     } else {
@@ -134,6 +169,13 @@ const SubCategory = () => {
     document.body.style.overflow = "auto"; 
   };
 
+  const handleEditSubmit = async () => {
+    setIsLoading(true); // Show loader when updating
+    await handleUpdateApi(editData.id); // Call update API
+    setIsLoading(false); // Hide loader after updating
+    closeEditModal();
+  };
+
   if (loading) {
     return <div>Loading subcategories...</div>;
   }
@@ -166,21 +208,10 @@ const SubCategory = () => {
       {isModalOpen && (
         <EditModal
           subcategory={editData}
-          categories={categories} 
-          onSubmit={(updatedData) => {
-            setTableRows((prevRows) =>
-              prevRows.map((row) =>
-                row.id === updatedData.id
-                  ? {
-                      ...row,
-                      subcategory_title: updatedData.subcategory_title,
-                      category: updatedData.category_name,
-                    }
-                  : row
-              )
-            );
-            closeEditModal();
-          }}
+          categories={categories}
+          setSelectedCategory={setSelectedCategory}
+          selectedCategory={selectedCategory} 
+          onSubmit={handleEditSubmit} // Pass the new handleEditSubmit function
           onClose={closeEditModal}
         />
       )}

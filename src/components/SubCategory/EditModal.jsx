@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@material-tailwind/react";
 
-const EditModal = ({ subcategory, categories, onSubmit, onClose }) => {
+const EditModal = ({ subcategory, categories, onSubmit, onClose, setSelectedCategory, selectedCategory }) => {
   const [subcategoryTitle, setSubcategoryTitle] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
   const modalRef = useRef(null); // Create a ref for the modal
-
+   
   useEffect(() => {
     if (subcategory) {
       setSubcategoryTitle(subcategory.subcategory_title);
-      setSelectedCategory(subcategory.category_id);
+      // setSelectedCategory(subcategory.category_id);
     }
   }, [subcategory]);
 
