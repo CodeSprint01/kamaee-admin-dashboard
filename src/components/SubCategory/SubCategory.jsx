@@ -19,46 +19,36 @@ const SubCategory = () => {
   const [subCategoryTitle, setSubCategoryTitle] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null); 
-  const [deleteName, setDeleteName] = useState(""); 
+  const [deleteName, setDeleteName] = useState("");
+  const [isLoading, setIsLoading] = useState(false); 
 
   const token = localStorage.getItem("authToken");
 
-  const handleApi = () => {
+  const handleApi = async () => {
     const URL = "https://api.kamaee.pk/api/subcategory";
-    const token = localStorage.getItem("authToken");
-
     const config = {
       headers: { Authorization: `Bearer ${token}` }
-  };
-  
-  const bodyParameters = {
-    subcategory_title: subCategoryTitle,
-    category_id: Number(selectedCategory)
-  };
-  axios.post( 
-    URL,
-    bodyParameters,
-    config
-  ).then(response => {
-    console.log("response", response)
- }) 
- .catch(err => {
-    console.log("err", err);
- });
+    };
     
+    const bodyParameters = {
+      subcategory_title: subCategoryTitle,
+      category_id: Number(selectedCategory)
+    };
 
+    try {
+      const response = await axios.post(URL, bodyParameters, config);
+      console.log("response", response);
+    } catch (err) {
+      console.log("err", err);
+    }
   };
-
 
   useEffect(() => {
     const fetchSubCategories = async () => {
       try {
-        const response = await axios.get(
-          "https://api.kamaee.pk/api/subcategories",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await axios.get("https://api.kamaee.pk/api/subcategories", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         const subcategories = response.data.subcategory.map((item) => ({
           id: item.id,
@@ -70,10 +60,7 @@ const SubCategory = () => {
         setTableRows(subcategories);
         setLoading(false);
       } catch (error) {
-        console.error(
-          "Error fetching subcategories:",
-          error.response ? error.response.data : error.message
-        );
+        console.error("Error fetching subcategories:", error.response ? error.response.data : error.message);
         setError("Error fetching subcategories");
         setLoading(false);
       }
@@ -81,20 +68,14 @@ const SubCategory = () => {
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(
-          "https://api.kamaee.pk/api/categories",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await axios.get("https://api.kamaee.pk/api/categories", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         if (Array.isArray(response.data.category)) {
           setCategories(response.data.category);
         } else {
-          console.error(
-            "Unexpected categories format:",
-            response.data.category
-          );
+          console.error("Unexpected categories format:", response.data.category);
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -130,21 +111,15 @@ const SubCategory = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axios.delete(
-        `https://api.kamaee.pk/api/delete/subcategory/${deleteId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.delete(`https://api.kamaee.pk/api/delete/subcategory/${deleteId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setTableRows((prevRows) => prevRows.filter((row) => row.id !== deleteId));
       setIsDeleteModalOpen(false); 
       setDeleteId(null); 
       document.body.style.overflow = "auto"; 
     } catch (error) {
-      console.error(
-        "Error deleting subcategory:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Error deleting subcategory:", error.response ? error.response.data : error.message);
       setError("Error deleting subcategory");
     }
   };
@@ -205,7 +180,6 @@ const SubCategory = () => {
               )
             );
             closeEditModal();
-          
           }}
           onClose={closeEditModal}
         />
@@ -218,19 +192,21 @@ const SubCategory = () => {
           setSelectedCategory={setSelectedCategory}
           subCategoryTitle={subCategoryTitle}
           setSubCategoryTitle={setSubCategoryTitle}
-          onSubmit={() => {
+          onSubmit={async () => {
+            setIsLoading(true); // Show loader when adding
+            await handleApi(); // Call API to add subcategory
             setTableRows((prevRows) => [
               ...prevRows,
               {
-                id: Math.random(),
+                id: Math.random(), // Assign a random ID or better handle in the API response
                 subcategory_title: subCategoryTitle,
                 category: categories.find(
                   (cat) => cat.id === parseInt(selectedCategory)
                 ).category_name,
               },
             ]);
+            setIsLoading(false); // Hide loader after adding
             closeAlertModal();
-            handleApi()
           }}
           onClose={closeAlertModal}
         />

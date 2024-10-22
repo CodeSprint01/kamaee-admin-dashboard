@@ -1,21 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@material-tailwind/react";
 
-const AlertModal = ({ categories, selectedCategory, setSelectedCategory, subCategoryTitle, setSubCategoryTitle, onSubmit, onClose }) => {
+const AlertModal = ({
+  categories,
+  selectedCategory,
+  setSelectedCategory,
+  subCategoryTitle,
+  setSubCategoryTitle,
+  onSubmit,
+  onClose,
+}) => {
+  const [loading, setLoading] = useState(false); // State to track loader
 
   useEffect(() => {
-    
     document.body.style.overflow = "hidden";
-    
-   
     return () => {
       document.body.style.overflow = "auto";
     };
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit();
+    setLoading(true); // Show loader when submitting
+    await onSubmit(); // Wait for submission to complete
+    setLoading(false); // Hide loader after submission
   };
 
   return (
@@ -24,7 +32,9 @@ const AlertModal = ({ categories, selectedCategory, setSelectedCategory, subCate
         <h2 className="text-lg font-semibold mb-4">Add New Subcategory</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Subcategory Title</label>
+            <label className="block text-sm font-medium mb-2">
+              Subcategory Title
+            </label>
             <input
               type="text"
               value={subCategoryTitle}
@@ -41,7 +51,9 @@ const AlertModal = ({ categories, selectedCategory, setSelectedCategory, subCate
               className="border border-gray-300 rounded-md p-2 w-full"
               required
             >
-              <option value="" disabled>Select a category</option>
+              <option value="" disabled>
+                Select a category
+              </option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.category_name}
@@ -49,9 +61,27 @@ const AlertModal = ({ categories, selectedCategory, setSelectedCategory, subCate
               ))}
             </select>
           </div>
-          <div className="flex justify-between">
-            <Button type="button" onClick={onClose} className="p-2 text-xs text-white bg-[#0054ba] group-hover:opacity-100 transition-opacity duration-300">Cancel</Button>
-            <Button type="submit" className="p-2 text-xs text-white bg-[#0054ba] group-hover:opacity-100 transition-opacity duration-300">Add SubCategory</Button>
+          <div className="gap-5 flex justify-between">
+            <Button
+              type="button"
+              onClick={onClose}
+              className="p-2 rounded-full text-lg w-full text-white bg-[#0054ba] transition-opacity duration-300"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className={`${
+                loading ? "w-12 h-12" : "w-full h-12"
+              } bg-[#0054ba] rounded-full text-white font-bold text-lg transition-all duration-500 ease-in-out transform hover:bg-[#003a8f] flex justify-center items-center`}
+              disabled={loading} // Disable button while loading
+            >
+              {loading ? (
+                <div className="w-5 h-5 border-4 border-transparent border-t-white rounded-full animate-spin"></div>
+              ) : (
+                "Add SubCategory"
+              )}
+            </Button>
           </div>
         </form>
       </div>
