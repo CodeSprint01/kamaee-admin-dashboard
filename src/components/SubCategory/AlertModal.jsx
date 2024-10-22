@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@material-tailwind/react";
 
 const AlertModal = ({
@@ -11,6 +11,7 @@ const AlertModal = ({
   onClose,
 }) => {
   const [loading, setLoading] = useState(false); // State to track loader
+  const modalRef = useRef(null); // Create a ref for the modal
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -18,6 +19,20 @@ const AlertModal = ({
       document.body.style.overflow = "auto";
     };
   }, []);
+
+  // Close modal if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +43,7 @@ const AlertModal = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-1/3">
+      <div ref={modalRef} className="bg-white rounded-lg shadow-lg p-6 w-1/3">
         <h2 className="text-lg font-semibold mb-4">Add New Subcategory</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

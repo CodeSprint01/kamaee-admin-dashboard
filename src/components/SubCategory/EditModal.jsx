@@ -1,16 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@material-tailwind/react";
 
 const EditModal = ({ subcategory, categories, onSubmit, onClose }) => {
   const [subcategoryTitle, setSubcategoryTitle] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const modalRef = useRef(null); // Create a ref for the modal
 
   useEffect(() => {
     if (subcategory) {
       setSubcategoryTitle(subcategory.subcategory_title);
-      setSelectedCategory(subcategory.category_id); 
+      setSelectedCategory(subcategory.category_id);
     }
   }, [subcategory]);
+
+  // Close modal if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,20 +34,19 @@ const EditModal = ({ subcategory, categories, onSubmit, onClose }) => {
       return;
     }
 
-    
     const category = categories.find(cat => cat.id === parseInt(selectedCategory));
     const categoryName = category ? category.category_name : "";
 
     onSubmit({
       id: subcategory.id,
       subcategory_title: subcategoryTitle,
-      category_name: categoryName, 
+      category_name: categoryName,
     });
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-1/3">
+      <div ref={modalRef} className="bg-white rounded-lg shadow-lg p-6 w-1/3">
         <h2 className="text-lg font-semibold mb-4">Edit Subcategory</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -62,8 +76,8 @@ const EditModal = ({ subcategory, categories, onSubmit, onClose }) => {
             </select>
           </div>
           <div className="flex justify-between">
-            <Button type="button" onClick={onClose} className="p-2 text-xs text-white bg-[#0054ba]  group-hover:opacity-100 transition-opacity duration-300">Cancel</Button>
-            <Button type="submit" className="p-2 text-xs text-white bg-[#0054ba]  group-hover:opacity-100 transition-opacity duration-300">Update</Button>
+            <Button type="button" onClick={onClose} className="p-2 text-xs text-white bg-[#0054ba] group-hover:opacity-100 transition-opacity duration-300">Cancel</Button>
+            <Button type="submit" className="p-2 text-xs text-white bg-[#0054ba] group-hover:opacity-100 transition-opacity duration-300">Update</Button>
           </div>
         </form>
       </div>
