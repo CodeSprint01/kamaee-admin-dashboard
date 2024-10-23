@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { AiFillCheckCircle, AiFillCloseCircle } from 'react-icons/ai';
-import { Typography } from '@material-tailwind/react';
+import { Typography, Button } from '@material-tailwind/react';
+import EditGig from './EditGig'; 
 
 const Gigs = () => {
-  const [gigs, setGigs] = useState([]);
+  const [gigs, setGigs] = useState([]); // Ensure gigs is initialized as an empty array
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
+  const [selectedGig, setSelectedGig] = useState(null);
 
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksIm90cFRpbWUiOm51bGwsImZpcnN0X25hbWUiOiJBbGkiLCJsYXN0X25hbWUiOiJSYXphIiwiZW1haWwiOiJhbGlyYXphMTE4MDQxQGdtYWlsLmNvbSIsImNuaWMiOiIzNTMwMjg1ODk3NTY1IiwiaXNBY3RpdmUiOnRydWUsInJvbGUiOiJidXllciIsInN0YXR1cyI6bnVsbCwiYWNjb3VudF9zdGF0dXMiOm51bGwsInBob25lX251bWJlciI6IjAzMDExMzM5MzgxIiwiYmlrZV9udW1iZXIiOm51bGwsImFkZHJlc3MiOiJMYWtzaG1pIENob3drIExhaG9yZSIsImltYWdlIjpudWxsLCJyYXRpbmdzIjpudWxsLCJjcmVhdGVkX2J5IjpudWxsLCJvdHAiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTkwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMTdUMTk6MTA6MTQuMDAwWiIsImxvY2F0aW9uIjp7ImlkIjozOSwidXNlcl9pZCI6MzksImxhdGl0dWRlIjozNS45OTksImxvbmdpdHVkZSI6NDUsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTk0WiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTk0WiJ9LCJpYXQiOjE3MjkyNDY5NDcsImV4cCI6MTczNzAyMjk0N30.4tMJ388Ge9NpOJlQmqnXE6cGCWQQIrbhVuRUaUzkWpE"; 
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksIm90cFRpbWUiOm51bGwsImZpcnN0X25hbWUiOiJBbGkiLCJsYXN0X25hbWUiOiJSYXphIiwiZW1haWwiOiJhbGlyYXphMTE4MDQxQGdtYWlsLmNvbSIsImNuaWMiOiIzNTMwMjg1ODk3NTY1IiwiaXNBY3RpdmUiOnRydWUsInJvbGUiOiJidXllciIsInN0YXR1cyI6bnVsbCwiYWNjb3VudF9zdGF0dXMiOm51bGwsInBob25lX251bWJlciI6IjAzMDExMzM5MzgxIiwiYmlrZV9udW1iZXIiOm51bGwsImFkZHJlc3MiOiJMYWtzaG1pIENob3drIExhaG9yZSIsImltYWdlIjpudWxsLCJyYXRpbmdzIjpudWxsLCJjcmVhdGVkX2J5IjpudWxsLCJvdHAiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTkwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMTdUMTk6MTA6MTQuMDAwWiIsImxvY2F0aW9uIjp7ImlkIjozOSwidXNlcl9pZCI6MzksImxhdGl0dWRlIjozNS45OTksImxvbmdpdHVkZSI6NDUsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTk0WiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTk0WiJ9LCJpYXQiOjE3Mjk1OTk0NDEsImV4cCI6MTczNzM3NTQ0MX0.xMHZl4WpjKpaztOQsFsr14ER9_7hiKBJsOiTBQj_y1o";
 
   useEffect(() => {
     const fetchGigs = async () => {
@@ -18,13 +22,9 @@ const Gigs = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        
-        console.log('Response data:', response.data); 
-        
-        
-        setGigs(response.data);
+        console.log("API Response:", response.data); 
+        setGigs(Array.isArray(response.data.Gigs) ? response.data.Gigs : []); 
       } catch (error) {
-        console.error('Error fetching gigs:', error); 
         setError("Error fetching gigs");
       } finally {
         setLoading(false);
@@ -33,6 +33,44 @@ const Gigs = () => {
 
     fetchGigs();
   }, [token]);
+
+  const handleEdit = (gig) => {
+    setSelectedGig(gig);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleDelete = async (gigId) => {
+    try {
+      await axios.delete(`https://api.kamaee.pk/api/delete/gig/${gigId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setGigs(gigs.filter((gig) => gig.id !== gigId)); 
+    } catch (error) {
+      setError("Error deleting gig");
+    } finally {
+      setIsDeleteConfirmationOpen(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setIsDeleteConfirmationOpen(false);
+  };
+
+  const updateGig = async (updatedGig) => {
+    console.log("Updating gig with data:", updatedGig);
+    try {
+      const response = await axios.post(`https://api.kamaee.pk/api/update/gig/${updatedGig.id}`, updatedGig, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Gig updated successfully:", response.data);
+    } catch (error) {
+      setError("Error updating gig:",  error.response ? error.response.data : error.message);
+    }
+  };
 
   if (loading) {
     return (
@@ -66,8 +104,8 @@ const Gigs = () => {
   }
 
   const TABLE_HEAD = [
-    "Gig Title", "Category", "Sub-category", "Price", "Active", "Deleted", 
-    "Interaction Method", "Created At", "Updated At"
+    "Gig Title", "Price", "Active", "Deleted", 
+    "Interaction Method", "Created At", "Updated At", "Actions"
   ];
 
   return (
@@ -96,61 +134,24 @@ const Gigs = () => {
                   </td>
                 </tr>
               ) : (
-                gigs["Gigs"].map((gig, index) => {
-                  const isLast = index === gigs.length - 1;
-                  const classes = isLast ? "p-4" : "p-4 border-b border-gray-300";
-
-                 
+                gigs.map((gig) => {
                   return (
-                    <tr key={gig.id} className={index % 2 !== 0 ? "bg-gray-100" : ""}>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {gig.title || "N/A"}
-                        </Typography>
+                    <tr key={gig.id}>
+                      <td className="p-4">
+                        <Typography variant="small" color="blue-gray" className="font-normal">{gig.gig_title || "N/A"}</Typography>
                       </td>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {gig.category || "N/A"}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {gig.sub_category || "N/A"}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          ${gig.price || "N/A"}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        {gig.isActive ? (
-                          <AiFillCheckCircle className="text-green-500 text-xl" />
-                        ) : (
-                          <AiFillCloseCircle className="text-red-500 text-xl" />
-                        )}
-                      </td>
-                      <td className={classes}>
-                        {gig.isDeleted ? (
-                          <AiFillCloseCircle className="text-red-500 text-xl" />
-                        ) : (
-                          <AiFillCheckCircle className="text-green-500 text-xl" />
-                        )}
-                      </td>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {gig.interaction_method || "N/A"}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {gig.createdAt ? new Date(gig.createdAt).toLocaleString() : "N/A"}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {gig.updatedAt ? new Date(gig.updatedAt).toLocaleString() : "N/A"}
-                        </Typography>
+                      <td className="p-4">${gig.price || "N/A"}</td>
+                      <td className="p-4">{gig.isActive ? <AiFillCheckCircle className="text-green-500" /> : <AiFillCloseCircle className="text-red-500" />}</td>
+                      <td className="p-4">{gig.isDeleted ? <AiFillCloseCircle className="text-red-500" /> : <AiFillCheckCircle className="text-green-500" />}</td>
+                      <td className="p-4">{gig.interact_method || "N/A"}</td>
+                      <td className="p-4">{new Date(gig.created_at).toLocaleString() || "N/A"}</td>
+                      <td className="p-4">{new Date(gig.updated_at).toLocaleString() || "N/A"}</td>
+                      <td className="p-4">
+                        <Button variant="text"  color="blue" onClick={() => handleEdit(gig)}>Edit</Button>
+                        <Button variant="text" color="red" className="ml-2" onClick={() => {
+                          setSelectedGig(gig);
+                          setIsDeleteConfirmationOpen(true);
+                        }}>Delete</Button>
                       </td>
                     </tr>
                   );
@@ -160,6 +161,28 @@ const Gigs = () => {
           </table>
         </div>
       </div>
+
+      {/* Delete Confirmation Popup */}
+      {isDeleteConfirmationOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h2 className="text-lg font-semibold">Are you sure you want to delete this gig: {selectedGig?.gig_title}?</h2>
+            <div className="flex justify-end mt-4">
+              <button onClick={cancelDelete} className="mr-2 bg-gray-300 p-2 rounded">Cancel</button>
+              <button onClick={() => handleDelete(selectedGig?.id)} className="bg-red-600 text-white p-2 rounded">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Gig Popup */}
+      {isEditDialogOpen && (
+        <EditGig 
+          gig={selectedGig} 
+          updateGig={updateGig} 
+          onClose={() => setIsEditDialogOpen(false)} 
+        />
+      )}
     </div>
   );
 };
