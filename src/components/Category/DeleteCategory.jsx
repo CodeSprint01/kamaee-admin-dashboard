@@ -1,9 +1,9 @@
 import React from "react";
 import { FaTimes } from 'react-icons/fa';
 
-const DeleteCategory = ({ categoryData, onConfirm, onCancel }) => {
+const DeleteCategory = ({ category , onConfirm, onCancel }) => {
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div className="  fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-md shadow-lg w-1/3">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Delete Category</h2>

@@ -16,6 +16,7 @@ const Category = () => {
     
     fetchCategories();
   }, []);
+
   const fetchCategories = async () => {
     try {
       const response = await axios({
@@ -54,9 +55,7 @@ setCategories(response.data.category || []);
   return (
     <div className="relative">
       <Card className="h-full w-full mt-3 overflow-scroll">
-        {
-          !loading &&
-          <DataTable rows={categories} /> }
+        {!loading && <DataTable rows={categories} setRows={setCategories} />}
       </Card>
       <div className="fixed bottom-6 right-6 group">
         <button

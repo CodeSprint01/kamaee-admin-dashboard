@@ -33,7 +33,7 @@ const DataTable = ({ rows, setRows }) => {
 
   const handleSave = async (updatedCategory) => {
     try {
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksIm90cFRpbWUiOm51bGwsImZpcnN0X25hbWUiOiJBbGkiLCJsYXN0X25hbWUiOiJSYXphIiwiZW1haWwiOiJhbGlyYXphMTE4MDQxQGdtYWlsLmNvbSIsImNuaWMiOiIzNTMwMjg1ODk3NTY1IiwiaXNBY3RpdmUiOnRydWUsInJvbGUiOiJidXllciIsInN0YXR1cyI6bnVsbCwiYWNjb3VudF9zdGF0dXMiOm51bGwsInBob25lX251bWJlciI6IjAzMDExMzM5MzgxIiwiYmlrZV9udW1iZXIiOm51bGwsImFkZHJlc3MiOiJMYWtzaG1pIENob3drIExhaG9yZSIsImltYWdlIjpudWxsLCJyYXRpbmdzIjpudWxsLCJjcmVhdGVkX2J5IjpudWxsLCJvdHAiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTkwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMTdUMTk6MTA6MTQuMDAwWiIsImxvY2F0aW9uIjp7ImlkIjozOSwidXNlcl9pZCI6MzksImxhdGl0dWRlIjozNS45OTksImxvbmdpdHVkZSI6NDUsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTk0WiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTk0WiJ9LCJpYXQiOjE3Mjk1OTk0NDEsImV4cCI6MTczNzM3NTQ0MX0.xMHZl4WpjKpaztOQsFsr14ER9_7hiKBJsOiTBQj_y1o"; 
+      const token = localStorage.getItem("authToken");
       const response = await fetch(`https://api.kamaee.pk/api/update/category/${updatedCategory.id}`, {
         method: 'PUT',
         headers: {
@@ -59,7 +59,7 @@ const DataTable = ({ rows, setRows }) => {
 
   const handleDeleteConfirm = async () => {
     try {
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzksIm90cFRpbWUiOm51bGwsImZpcnN0X25hbWUiOiJBbGkiLCJsYXN0X25hbWUiOiJSYXphIiwiZW1haWwiOiJhbGlyYXphMTE4MDQxQGdtYWlsLmNvbSIsImNuaWMiOiIzNTMwMjg1ODk3NTY1IiwiaXNBY3RpdmUiOnRydWUsInJvbGUiOiJidXllciIsInN0YXR1cyI6bnVsbCwiYWNjb3VudF9zdGF0dXMiOm51bGwsInBob25lX251bWJlciI6IjAzMDExMzM5MzgxIiwiYmlrZV9udW1iZXIiOm51bGwsImFkZHJlc3MiOiJMYWtzaG1pIENob3drIExhaG9yZSIsImltYWdlIjpudWxsLCJyYXRpbmdzIjpudWxsLCJjcmVhdGVkX2J5IjpudWxsLCJvdHAiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTkwWiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMTdUMTk6MTA6MTQuMDAwWiIsImxvY2F0aW9uIjp7ImlkIjozOSwidXNlcl9pZCI6MzksImxhdGl0dWRlIjozNS45OTksImxvbmdpdHVkZSI6NDUsImNyZWF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTk0WiIsInVwZGF0ZWRBdCI6IjIwMjQtMTAtMTZUMTA6NDM6NDAuNTk0WiJ9LCJpYXQiOjE3Mjk1OTk0NDEsImV4cCI6MTczNzM3NTQ0MX0.xMHZl4WpjKpaztOQsFsr14ER9_7hiKBJsOiTBQj_y1o"; 
+      const token = localStorage.getItem("authToken");
       const response = await fetch(`https://api.kamaee.pk/api/delete/category/${selectedCategory.id}`, {
         method: 'DELETE',
         headers: {
@@ -178,11 +178,11 @@ const DataTable = ({ rows, setRows }) => {
       )}
 
       {/* Delete Confirmation Popup */}
-      {isDeleting && selectedCategory && (
-        <DeleteCategory
-          category={selectedCategory}
-          onConfirm={handleDeleteConfirm}
-          onCancel={() => setIsDeleting(false)}
+      {isDeleting && (
+        <DeleteCategory 
+          category={selectedCategory} 
+          onConfirm={handleDeleteConfirm} 
+          onClose={() => setIsDeleting(false)} 
         />
       )}
     </div>
