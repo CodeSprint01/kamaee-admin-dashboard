@@ -48,7 +48,7 @@ const Gigs = () => {
   ];
 
   return (
-    <div className="mt-15 mx-7">
+    <div className="mt-12 mx-7">
       <div className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-300">

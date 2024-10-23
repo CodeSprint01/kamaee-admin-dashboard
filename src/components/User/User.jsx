@@ -132,7 +132,7 @@ const User = () => {
   const TABLE_HEAD = ["First Name", "Last Name", "Email", "Phone Number", "CNIC", "Status", "Image", "Orders", "Friends", "Actions"];
 
   return (
-    <div className="mt-15">
+    <div className="mt-11">
       {/* Search and Filter Section */}
       <div className="mb-4 flex items-center">
         <div className="mr-4 ">

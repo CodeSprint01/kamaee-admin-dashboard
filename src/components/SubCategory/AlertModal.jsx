@@ -94,7 +94,7 @@ const AlertModal = ({
               {loading ? (
                 <div className="w-5 h-5 border-4 border-transparent border-t-white rounded-full animate-spin"></div>
               ) : (
-                "Add SubCategory"
+                "Add "
               )}
             </Button>
           </div>
