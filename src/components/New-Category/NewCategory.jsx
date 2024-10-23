@@ -59,7 +59,7 @@ const NewCategory = ({ onCategoryAdded = () => {} }) => {
       setError("");
       
    
-      navigate("/category"); 
+      navigate("/"); 
 
     } catch (error) {
       console.error("Full error response:", error.response);
