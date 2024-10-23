@@ -22,7 +22,7 @@ const DataTable = ({ rows, onEdit, onDelete }) => {
 console.log("filteredRows", filteredRows);
 
   return (
-    <div className="">
+    <div className=" flex flex-col">
      
     <div className="mb-4 relative">
         <input

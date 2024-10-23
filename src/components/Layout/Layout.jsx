@@ -2,20 +2,18 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import NewCategory from "../New-Category/NewCategory";
 import SubCategory from "../SubCategory/SubCategory";
-import Dashboard from "../Dashboard/Dashboard";
 import Category from "../Category/Category";
 import Sidebar from "../Sidebar/sidebar";
 import Header from "../Header/Header";
 import Gigs from "../Gigs/Gigs";
 import User from "../User/User";
-// import NewSubCategory from "../NewSubCategory/NewSubCategory";
+
 
 
 function Layout({ onLogout }) {
   const location = useLocation();
   const headings = {
-    "/": "Dashboard",
-    "/category": "Category",
+    "/": "Category",
     "/subcategory": "SubCategory",
     "/new-subcategory": "SubCategory",
     "/gigs": "Gigs",
@@ -32,13 +30,13 @@ function Layout({ onLogout }) {
         <Header heading={getHeading()} />
         <div className="mt-7 md:p-4">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/category" element={<Category />} />
+            
+            <Route path="/" element={<Category />} />
             <Route path="/gigs" element={<Gigs />} />
             <Route path="/subcategory" element={<SubCategory />} />
             <Route path="/user" element={<User />} />
             <Route path="/new-category" element={<NewCategory />} />
-            {/* <Route path="/new-subcategory" element={<NewSubCategory />} /> */}
+           
           </Routes>
         </div>
       </div>

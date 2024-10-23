@@ -21,8 +21,8 @@ const Sidebar = ({ onLogout }) => {
 
   // Dynamic heading based on route path
   const headings = {
-    "/": "Dashboard",
-    "/category": "Category",
+  
+    "/": "Category",
     "/subcategory": "SubCategory",
     "/new-subcategory": "SubCategory", // Updated here
     "/gigs": "Gigs",
@@ -34,8 +34,8 @@ const Sidebar = ({ onLogout }) => {
   const getHeading = () => headings[location.pathname] || "";
 
   const menuItems = [
-    { name: "Dashboard", path: "/", icon: <LuLayoutDashboard /> },
-    { name: "Category", path: "/category", icon: <FaThList /> },
+    
+    { name: "Category", path: "/", icon: <FaThList /> },
     { name: "SubCategory", path: "/subcategory", icon: <FaListAlt /> },
     { name: "Gigs", path: "/gigs", icon: <FaBriefcase /> },
     { name: "User", path: "/user", icon: <FaUserAlt /> },
@@ -77,7 +77,7 @@ const Sidebar = ({ onLogout }) => {
         </div>
 
         {menuItems.map((item) => (
-          <div className="mt-5 " key={item.name}>
+          <div className="mt-7 " key={item.name}>
             <Link to={item.path} onClick={handleMenuItemClick}>
               <h2
                 className={`flex items-center text-xl font-medium mb-2 cursor-pointer rounded p-3 transition duration-300 
@@ -93,7 +93,7 @@ const Sidebar = ({ onLogout }) => {
           </div>
         ))}
 
-        <div className="mt-7">
+        <div className="mt-8">
           <button
             onClick={() => setModalOpen(true)}
             className="w-full bg-[#618abd] p-2 rounded flex items-center justify-center hover:bg-[#40556e]"
