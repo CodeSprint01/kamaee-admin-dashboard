@@ -82,7 +82,7 @@ const DataTable = ({ rows, setRows }) => {
   };
 
   return (
-    <div className="mt-5 flex flex-col">
+    <div className="">
       {/* Search Input */}
       <div className="mb-4 relative">
         <input
