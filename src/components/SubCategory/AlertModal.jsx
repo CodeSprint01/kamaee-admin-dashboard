@@ -80,7 +80,7 @@ const AlertModal = ({
             <Button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-full text-lg w-full text-white bg-[#0054ba] transition-opacity duration-300"
+              className="p-2 rounded-full text-lg w-full text-white bg-[#0054ba] transition-opacity duration-300  ease-in-out transform hover:bg-[#003a8f]"
             >
               Cancel
             </Button>

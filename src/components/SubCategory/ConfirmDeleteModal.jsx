@@ -36,7 +36,7 @@ const ConfirmDeleteModal = ({ itemName, onDeleteConfirm, onClose }) => {
         <div className="flex justify-between gap-5 mt-4">
           <Button
             onClick={onClose}
-            className="p-2 w-full rounded-full text-lg text-white bg-[#0054ba] group-hover:opacity-100 transition-opacity duration-300"
+            className="p-2 w-full rounded-full text-lg text-white bg-[#0054ba] \d ease-in-out transform hover:bg-[#003a8f] group-hover:opacity-100 transition-opacity duration-300"
           >
             Cancel
           </Button>

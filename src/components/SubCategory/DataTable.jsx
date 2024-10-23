@@ -3,7 +3,7 @@ import { Typography } from "@material-tailwind/react";
 import { FaTimes } from 'react-icons/fa';
 
 const DataTable = ({ rows, onEdit, onDelete }) => {
-  const TABLE_HEAD = ["Subcategory Title", "Category", "Created At", "Actions"];
+  const TABLE_HEAD = ["Subcategory Title", "Created At", "Actions"];
   
   // State for search term
   const [searchTerm, setSearchTerm] = useState("");
@@ -77,11 +77,11 @@ console.log("filteredRows", filteredRows);
                       {subcategory_title}
                     </Typography>
                   </td>
-                  <td className={classes}>
+                  {/* <td className={classes}>
                     <Typography variant="small" color="blue-gray" className="font-normal">
-                      {category}
+                      // {category}
                     </Typography>
-                  </td>
+                  </td> */}
                   <td className={classes}>
                     <Typography variant="small" color="blue-gray" className="font-normal">
                       {formatDate(created_at)}

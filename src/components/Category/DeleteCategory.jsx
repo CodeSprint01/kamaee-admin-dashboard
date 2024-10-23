@@ -1,10 +1,32 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { FaTimes } from 'react-icons/fa';
 
-const DeleteCategory = ({ categoryData, onConfirm, onCancel }) => {
+const DeleteCategory = ({ category, onConfirm, onCancel }) => {
+  const popupRef = useRef(null);
+
+  // Handle click outside to close the popup
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        onCancel(); // Close popup if clicked outside
+      }
+    };
+
+    // Prevent background scrolling
+    document.body.style.overflow = "hidden";
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    
+    // Clean up event listener and restore background scrolling
+    return () => {
+      document.body.style.overflow = "auto";
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [onCancel]);
+
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-md shadow-lg w-1/3">
+      <div ref={popupRef} className="bg-white p-6 rounded-md shadow-lg w-1/3">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Delete Category</h2>
           <button onClick={onCancel} className="text-gray-600 hover:text-red-500">
@@ -19,13 +41,13 @@ const DeleteCategory = ({ categoryData, onConfirm, onCancel }) => {
         <div className="flex justify-end space-x-4">
           <button
             onClick={onConfirm}
-            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+            className="p-2 w-full rounded-full text-lg text-white bg-[#0054ba] \d ease-in-out transform hover:bg-[#003a8f] group-hover:opacity-100 transition-opacity duration-300"
           >
-            Yes, Delete
+             Delete
           </button>
           <button
             onClick={onCancel}
-            className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500"
+            className="p-2 w-full rounded-full text-lg text-white bg-[#0054ba] \d ease-in-out transform hover:bg-[#003a8f] group-hover:opacity-100 transition-opacity duration-300"
           >
             Cancel
           </button>

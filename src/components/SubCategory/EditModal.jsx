@@ -74,9 +74,9 @@ const EditModal = ({ subcategory, categories, onSubmit, onClose, setSelectedCate
               ))}
             </select>
           </div>
-          <div className="flex justify-between">
-            <Button type="button" onClick={onClose} className="p-2 text-xs text-white bg-[#0054ba] group-hover:opacity-100 transition-opacity duration-300">Cancel</Button>
-            <Button type="submit" className="p-2 text-xs text-white bg-[#0054ba] group-hover:opacity-100 transition-opacity duration-300">Update</Button>
+          <div className="flex justify-between gap-5">
+            <Button type="button" onClick={onClose} className="p-2 w-full rounded-full text-lg text-white bg-[#0054ba] \d ease-in-out transform hover:bg-[#003a8f] group-hover:opacity-100 transition-opacity duration-300">Cancel</Button>
+            <Button type="submit" className="p-2 w-full rounded-full text-lg text-white bg-[#0054ba] \d ease-in-out transform hover:bg-[#003a8f] group-hover:opacity-100 transition-opacity duration-300">Update</Button>
           </div>
         </form>
       </div>
