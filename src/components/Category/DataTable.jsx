@@ -182,7 +182,7 @@ const DataTable = ({ rows, setRows }) => {
         <DeleteCategory 
           category={selectedCategory} 
           onConfirm={handleDeleteConfirm} 
-          onClose={() => setIsDeleting(false)} 
+          onCancel={() => setIsDeleting(false)} 
         />
       )}
     </div>
